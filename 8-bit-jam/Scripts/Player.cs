@@ -10,10 +10,11 @@ public partial class Player : MazeExplorer
     private Sprite2D Up;
 
     public static event Action PlayerMoved;
+    public static event Action PlayerHPChanged;
 
-    public int MaxHP = 1;
+    public int MaxHP = 3;
 
-    public int HP = 1;
+    public int HP = 3;
 
     public override void _Ready()
     {
@@ -64,6 +65,8 @@ public partial class Player : MazeExplorer
     public void Attack(Enemy enemy)
     {
         enemy.Damage();
+
+        OnMoved(Direction.None);
     }
 
     protected override bool CanMove(Direction direction)
@@ -74,12 +77,18 @@ public partial class Player : MazeExplorer
         return base.CanMove(direction);
     }
 
-    public void Damage()
+    public async void Damage()
     {
         HP--;
 
+        PlayerHPChanged?.Invoke();
+
         if (HP <= 0)
             GameManager.GameOver();
+
+        SelfModulate = ColorPalette.Red;
+        await ToSignal(GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
+        SelfModulate = ColorPalette.Brown;
     }
 
     private bool IsEnemyThere(Direction direction)

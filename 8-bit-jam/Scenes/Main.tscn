@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=12 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="Texture2D" uid="uid://bmvh6md676f4n" path="res://Images/monochrome-transparent_packed.png" id="2_5kmac"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://b0mxq1ev47708" path="res://Images/Minotaur.png" id="3_tdvs7"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="4_663sx"]
 [ext_resource type="Texture2D" uid="uid://cdqvo04t2rjbq" path="res://Images/CellSelect.tres" id="5_8vct7"]
+[ext_resource type="Script" path="res://Scripts/Heart.cs" id="7_8m3qh"]
 [ext_resource type="Texture2D" uid="uid://bawfxluypo720" path="res://Images/HeartBorder.tres" id="8_gnwfo"]
 [ext_resource type="Texture2D" uid="uid://fctqpmxh5v06" path="res://Images/HeartFull.tres" id="9_illg4"]
 
@@ -1147,15 +1148,48 @@ texture = ExtResource("5_8vct7")
 centered = false
 offset = Vector2(0, -16)
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="Heart1" type="Node2D" parent="."]
+script = ExtResource("7_8m3qh")
 
-[node name="HeartBorder" type="Sprite2D" parent="Node2D"]
+[node name="HeartBorder" type="Sprite2D" parent="Heart1"]
 self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 z_index = 1
 position = Vector2(16, 16)
 texture = ExtResource("8_gnwfo")
 
-[node name="HeartFull" type="Sprite2D" parent="Node2D"]
+[node name="HeartFull" type="Sprite2D" parent="Heart1"]
+self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
+position = Vector2(16, 16)
+texture = ExtResource("9_illg4")
+
+[node name="Heart2" type="Node2D" parent="."]
+position = Vector2(16, 0)
+script = ExtResource("7_8m3qh")
+Number = 2
+
+[node name="HeartBorder" type="Sprite2D" parent="Heart2"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
+z_index = 1
+position = Vector2(16, 16)
+texture = ExtResource("8_gnwfo")
+
+[node name="HeartFull" type="Sprite2D" parent="Heart2"]
+self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
+position = Vector2(16, 16)
+texture = ExtResource("9_illg4")
+
+[node name="Heart3" type="Node2D" parent="."]
+position = Vector2(32, 0)
+script = ExtResource("7_8m3qh")
+Number = 3
+
+[node name="HeartBorder" type="Sprite2D" parent="Heart3"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
+z_index = 1
+position = Vector2(16, 16)
+texture = ExtResource("8_gnwfo")
+
+[node name="HeartFull" type="Sprite2D" parent="Heart3"]
 self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
 position = Vector2(16, 16)
 texture = ExtResource("9_illg4")

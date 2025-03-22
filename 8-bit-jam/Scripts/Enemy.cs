@@ -30,11 +30,14 @@ public partial class Enemy : MazeExplorer
         GameManager.Player.Damage();
     }
 
-    public void Damage()
+    public async void Damage()
     {
         _isDead = true;
 
         GameManager.Enemies.Remove(this);
+
+        SelfModulate = ColorPalette.Red;
+        await ToSignal(GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
 
         QueueFree();
     }
