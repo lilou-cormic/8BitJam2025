@@ -16,6 +16,8 @@ public partial class Enemy : MazeExplorer
         base._Ready();
 
         SetLocation(GameManager.Maze.Entrance);
+
+        SelfModulate = ColorPalette.White;
     }
 
     public override void _ExitTree()
@@ -23,9 +25,48 @@ public partial class Enemy : MazeExplorer
         Player.PlayerMoved -= Player_PlayerMoved;
     }
 
+    public void Attack()
+    {
+        GameManager.Player.Damage();
+    }
+
+    public void Damage()
+    {
+        _isDead = true;
+
+        GameManager.Enemies.Remove(this);
+
+        QueueFree();
+    }
+
     protected override void OnMoved(Direction direction)
     {
         _direction = direction;
+    }
+
+    private bool IsPlayerThere(Direction direction)
+    {
+        return GameManager.Player.Location == Location.GetAdjacent(direction);
+    }
+
+    protected override bool CanMove(Direction direction)
+    {
+        if (GameManager.IsEnemyThere(Location.GetAdjacent(direction)))
+            return false;
+
+        return base.CanMove(direction);
+    }
+
+    protected override bool TryMove(Direction direction)
+    {
+        if (IsPlayerThere(direction))
+        {
+            Attack();
+            OnMoved(direction);
+            return true;
+        }
+
+        return base.TryMove(direction);
     }
 
     private void Player_PlayerMoved()
@@ -41,21 +82,39 @@ public partial class Enemy : MazeExplorer
 
         Direction direction4 = (Direction)(((int)_direction + 2) % 4);
 
+        if (IsPlayerThere(direction1))
+        {
+            TryMove(direction1);
+            return;
+        }
+
+        if (IsPlayerThere(direction2))
+        {
+            TryMove(direction2);
+            return;
+        }
+
+        if (IsPlayerThere(direction3))
+        {
+            TryMove(direction3);
+            return;
+        }
+
         if (CanMove(direction1) && !HasExplored(Location.GetAdjacent(direction1)))
         {
-            Move(direction1);
+            TryMove(direction1);
             return;
         }
 
         if (CanMove(direction2) && !HasExplored(Location.GetAdjacent(direction2)))
         {
-            Move(direction2);
+            TryMove(direction2);
             return;
         }
 
         if (CanMove(direction3) && !HasExplored(Location.GetAdjacent(direction3)))
         {
-            Move(direction3);
+            TryMove(direction3);
             return;
         }
 
@@ -63,7 +122,7 @@ public partial class Enemy : MazeExplorer
         {
             var dirs = new Direction[] { direction1, direction1, direction1, direction2, direction3 };
 
-            Move(dirs[GD.RandRange(0, dirs.Length - 1)]);
+            TryMove(dirs[GD.RandRange(0, dirs.Length - 1)]);
             return;
         }
 
@@ -71,7 +130,7 @@ public partial class Enemy : MazeExplorer
         {
             var dirs = new Direction[] { direction1, direction1, direction2 };
 
-            Move(dirs[GD.RandRange(0, dirs.Length - 1)]);
+            TryMove(dirs[GD.RandRange(0, dirs.Length - 1)]);
             return;
         }
 
@@ -79,7 +138,7 @@ public partial class Enemy : MazeExplorer
         {
             var dirs = new Direction[] { direction1, direction1, direction3 };
 
-            Move(dirs[GD.RandRange(0, dirs.Length - 1)]);
+            TryMove(dirs[GD.RandRange(0, dirs.Length - 1)]);
             return;
         }
 
@@ -87,7 +146,7 @@ public partial class Enemy : MazeExplorer
         {
             var dirs = new Direction[] { direction2, direction3, direction3 };
 
-            Move(dirs[GD.RandRange(0, dirs.Length - 1)]);
+            TryMove(dirs[GD.RandRange(0, dirs.Length - 1)]);
             return;
         }
 

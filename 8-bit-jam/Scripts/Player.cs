@@ -1,27 +1,41 @@
 ﻿using Godot;
 using System;
+using System.Linq;
 
 public partial class Player : MazeExplorer
 {
-    private Node2D Right;
-    private Node2D Down;
-    private Node2D Left;
-    private Node2D Up;
+    private Sprite2D Right;
+    private Sprite2D Down;
+    private Sprite2D Left;
+    private Sprite2D Up;
 
     public static event Action PlayerMoved;
+
+    public int MaxHP = 1;
+
+    public int HP = 1;
 
     public override void _Ready()
     {
         base._Ready();
 
-        Right = GetNode<Node2D>("Right");
-        Down = GetNode<Node2D>("Down");
-        Left = GetNode<Node2D>("Left");
-        Up = GetNode<Node2D>("Up");
+        HP = MaxHP;
+
+        Right = GetNode<Sprite2D>("Right");
+        Down = GetNode<Sprite2D>("Down");
+        Left = GetNode<Sprite2D>("Left");
+        Up = GetNode<Sprite2D>("Up");
+
+        SelfModulate = ColorPalette.Brown;
     }
 
     public override void _Process(double delta)
     {
+        SetDirection(Right, Direction.Right);
+        SetDirection(Down, Direction.Down);
+        SetDirection(Left, Direction.Left);
+        SetDirection(Up, Direction.Up);
+
         if (Input.IsActionJustPressed("ui_right"))
         {
             TryMove(Direction.Right);
@@ -38,11 +52,50 @@ public partial class Player : MazeExplorer
         {
             TryMove(Direction.Up);
         }
+    }
 
-        Right.Visible = GameManager.Maze.CanMove(Location, Direction.Right);
-        Down.Visible = GameManager.Maze.CanMove(Location, Direction.Down);
-        Left.Visible = GameManager.Maze.CanMove(Location, Direction.Left);
-        Up.Visible = GameManager.Maze.CanMove(Location, Direction.Up);
+    private void SetDirection(Sprite2D sprite, Direction direction)
+    {
+        sprite.Visible = GameManager.Maze.CanMove(Location, direction);
+
+        sprite.SelfModulate = GameManager.IsEnemyThere(Location.GetAdjacent(direction)) ? ColorPalette.Red : ColorPalette.White;
+    }
+
+    public void Attack(Enemy enemy)
+    {
+        enemy.Damage();
+    }
+
+    protected override bool CanMove(Direction direction)
+    {
+        if (Location.GetAdjacent(direction) == GameManager.Maze.Entrance)
+            return false;
+
+        return base.CanMove(direction);
+    }
+
+    public void Damage()
+    {
+        HP--;
+
+        if (HP <= 0)
+            GameManager.GameOver();
+    }
+
+    private bool IsEnemyThere(Direction direction)
+    {
+        return GameManager.IsEnemyThere(Location.GetAdjacent(direction));
+    }
+
+    protected override bool TryMove(Direction direction)
+    {
+        if (IsEnemyThere(direction))
+        {
+            Attack(GameManager.Enemies.First(x => x.Location == Location.GetAdjacent(direction)));
+            return true;
+        }
+
+        return base.TryMove(direction);
     }
 
     protected override void OnMoved(Direction direction)

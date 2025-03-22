@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://dr01yugnp7cf3"]
+
+[ext_resource type="Texture2D" uid="uid://dv6c2m25biq6f" path="res://Images/SwordGuy.tres" id="1_lqira"]
+[ext_resource type="Script" path="res://Scripts/Enemy.cs" id="2_ssrpv"]
+
+[node name="Enemy" type="Sprite2D"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
+texture = ExtResource("1_lqira")
+centered = false
+script = ExtResource("2_ssrpv")

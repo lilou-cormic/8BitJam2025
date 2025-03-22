@@ -1,7 +1,11 @@
 using Godot;
+using System.Collections.Generic;
+using System.Linq;
 
 public partial class GameManager : Node
 {
+    private static GameManager _instance;
+
     public static MazeGrid Maze { get; private set; }
 
     private static Vector2I LeftBorder = new(20, 1);
@@ -16,8 +20,21 @@ public partial class GameManager : Node
 
     public static Player Player { get; private set; }
 
+    public static List<Enemy> Enemies { get; private set; }
+
+    [Export] PackedScene EnemyPrefab;
+
+    int count = 0;
+
+    public override void _EnterTree()
+    {
+        Player.PlayerMoved += Player_PlayerMoved;
+    }
+
     public override void _Ready()
     {
+        _instance = this;
+
         Maze = MazeGrid.CreateMaze();
 
         Player = GetNode<Player>("%Player");
@@ -32,6 +49,31 @@ public partial class GameManager : Node
                 tileMapLayer.SetCell(new Vector2I(col, row), 1, GetAtlasCoords(Maze.GetCell(col, row).CellType));
             }
         }
+
+        Enemies = new List<Enemy>();
+
+        SpawnEnemy();
+    }
+
+    public override void _ExitTree()
+    {
+        Player.PlayerMoved -= Player_PlayerMoved;
+    }
+
+    private void SpawnEnemy()
+    {
+        if (IsEnemyThere(Maze.Entrance))
+            return;
+
+        Enemy enemy = EnemyPrefab.Instantiate<Enemy>();
+        AddChild(enemy);
+
+        Enemies.Add(enemy);
+    }
+
+    public static void GameOver()
+    {
+        _instance.GetTree().ChangeSceneToFile(@"res://Scenes/Main.tscn");
     }
 
     private Vector2I GetAtlasCoords(CellType cellType)
@@ -64,5 +106,18 @@ public partial class GameManager : Node
     public static Vector2 GetPosition(MazeLocation location)
     {
         return new Vector2(location.Column * 16 - 8, location.Row * 16 + 24);
+    }
+
+    public static bool IsEnemyThere(MazeLocation location)
+    {
+        return Enemies.Any(x => x.Location == location);
+    }
+
+    private void Player_PlayerMoved()
+    {
+        count++;
+
+        if (count % 10 == 0)
+            SpawnEnemy();
     }
 }

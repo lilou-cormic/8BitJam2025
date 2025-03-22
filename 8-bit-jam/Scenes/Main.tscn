@@ -1,12 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=11 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="Texture2D" uid="uid://bmvh6md676f4n" path="res://Images/monochrome-transparent_packed.png" id="2_5kmac"]
+[ext_resource type="PackedScene" uid="uid://dr01yugnp7cf3" path="res://Prefabs/Enemy.tscn" id="2_apvhn"]
 [ext_resource type="Texture2D" uid="uid://b0mxq1ev47708" path="res://Images/Minotaur.png" id="3_tdvs7"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="4_663sx"]
 [ext_resource type="Texture2D" uid="uid://cdqvo04t2rjbq" path="res://Images/CellSelect.tres" id="5_8vct7"]
-[ext_resource type="Texture2D" uid="uid://dv6c2m25biq6f" path="res://Images/SwordGuy.tres" id="6_s4wm3"]
-[ext_resource type="Script" path="res://Scripts/Enemy.cs" id="7_tc7gg"]
+[ext_resource type="Texture2D" uid="uid://bawfxluypo720" path="res://Images/HeartBorder.tres" id="8_gnwfo"]
+[ext_resource type="Texture2D" uid="uid://fctqpmxh5v06" path="res://Images/HeartFull.tres" id="9_illg4"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qri6o"]
 texture = ExtResource("2_5kmac")
@@ -1104,6 +1105,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="GameManager" type="Node2D" parent="."]
 script = ExtResource("1_hyjow")
+EnemyPrefab = ExtResource("2_apvhn")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
@@ -1116,32 +1118,44 @@ tile_set = SubResource("TileSet_3a6nl")
 unique_name_in_owner = true
 self_modulate = Color(0.6, 0.309804, 0, 1)
 z_index = 5
+position = Vector2(24, 56)
 texture = ExtResource("3_tdvs7")
 centered = false
 script = ExtResource("4_663sx")
 
 [node name="Right" type="Sprite2D" parent="Player"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 texture = ExtResource("5_8vct7")
 centered = false
 offset = Vector2(16, 0)
 
 [node name="Down" type="Sprite2D" parent="Player"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 texture = ExtResource("5_8vct7")
 centered = false
 offset = Vector2(0, 16)
 
 [node name="Left" type="Sprite2D" parent="Player"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 texture = ExtResource("5_8vct7")
 centered = false
 offset = Vector2(-16, 0)
 
 [node name="Up" type="Sprite2D" parent="Player"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 texture = ExtResource("5_8vct7")
 centered = false
 offset = Vector2(0, -16)
 
-[node name="Enemy" type="Sprite2D" parent="."]
-position = Vector2(200, 200)
-texture = ExtResource("6_s4wm3")
-centered = false
-script = ExtResource("7_tc7gg")
+[node name="Node2D" type="Node2D" parent="."]
+
+[node name="HeartBorder" type="Sprite2D" parent="Node2D"]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
+z_index = 1
+position = Vector2(16, 16)
+texture = ExtResource("8_gnwfo")
+
+[node name="HeartFull" type="Sprite2D" parent="Node2D"]
+self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
+position = Vector2(16, 16)
+texture = ExtResource("9_illg4")

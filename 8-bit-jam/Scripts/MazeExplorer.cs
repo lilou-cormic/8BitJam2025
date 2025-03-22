@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-public partial class MazeExplorer : Node2D
+public partial class MazeExplorer : Sprite2D
 {
     public MazeLocation Location { get; private set; }
 
@@ -35,7 +35,7 @@ public partial class MazeExplorer : Node2D
     {
     }
 
-    public bool TryMove(Direction direction)
+    protected virtual bool TryMove(Direction direction)
     {
         if (CanMove(direction))
         {
