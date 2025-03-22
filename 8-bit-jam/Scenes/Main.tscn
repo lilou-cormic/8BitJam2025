@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=7 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="Texture2D" uid="uid://bmvh6md676f4n" path="res://Images/monochrome-transparent_packed.png" id="2_5kmac"]
+[ext_resource type="Texture2D" uid="uid://b0mxq1ev47708" path="res://Images/Minotaur.png" id="3_tdvs7"]
+[ext_resource type="Script" path="res://Scripts/Player.cs" id="4_663sx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qri6o"]
 texture = ExtResource("2_5kmac")
@@ -72,6 +74,7 @@ texture = ExtResource("2_5kmac")
 16:1/0 = 0
 17:1/0 = 0
 18:1/0 = 0
+19:1/next_alternative_id = 3
 19:1/0 = 0
 20:1/0 = 0
 21:1/0 = 0
@@ -1088,10 +1091,26 @@ sources/1 = SubResource("TileSetAtlasSource_qri6o")
 
 [node name="Main" type="Node2D"]
 
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -1
+offset_left = -17.0
+offset_top = -13.0
+offset_right = 279.0
+offset_bottom = 244.0
+color = Color(0, 0, 0, 1)
+
 [node name="GameManager" type="Node2D" parent="."]
 script = ExtResource("1_hyjow")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
+self_modulate = Color(0.721569, 0.721569, 0.721569, 1)
 position = Vector2(-8, 24)
 tile_set = SubResource("TileSet_3a6nl")
+
+[node name="Player" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+self_modulate = Color(0.6, 0.309804, 0, 1)
+texture = ExtResource("3_tdvs7")
+centered = false
+script = ExtResource("4_663sx")

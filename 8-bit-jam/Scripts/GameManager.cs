@@ -2,29 +2,35 @@ using Godot;
 
 public partial class GameManager : Node
 {
-    static int sourceId = 1;
-    static Vector2I LeftBorder = new(20, 1);
-    static Vector2I TopBorder = new(19, 2);
-    static Vector2I RightBorder = new(18, 1);
-    static Vector2I BottomBorder = new(19, 0);
-    static Vector2I Corner = new(-1, -1);
-    static Vector2I HorizontalWall = new(48, 10);
-    static Vector2I VerticalWall = new(48, 10);
-    static Vector2I Intersection = new(48, 10);
-    static Vector2I Empty = new(-1, -1);
+    public static MazeGrid Maze { get; private set; }
+
+    private static Vector2I LeftBorder = new(20, 1);
+    private static Vector2I TopBorder = new(19, 2);
+    private static Vector2I RightBorder = new(18, 1);
+    private static Vector2I BottomBorder = new(19, 0);
+    private static Vector2I Corner = new(-1, -1);
+    private static Vector2I HorizontalWall = new(48, 10);
+    private static Vector2I VerticalWall = new(48, 10);
+    private static Vector2I Intersection = new(48, 10);
+    private static Vector2I Empty = new(-1, -1);
+    private static Vector2I Floor = new(19, 1);
+
+    public static Player Player { get; private set; }
 
     public override void _Ready()
     {
-        var maze = MazeGrid.CreateMaze();
+        Maze = MazeGrid.CreateMaze();
 
+        Player = GetNode<Player>("%Player");
+        Player.SetLocation(Maze.PlayerStartLocation);
 
         TileMapLayer tileMapLayer = GetNode<TileMapLayer>("%TileMapLayer");
 
-        for (int row = 0; row < maze.RowCount; row++)
+        for (int row = 0; row < Maze.RowCount; row++)
         {
-            for (int col = 0; col < maze.ColumnCount; col++)
+            for (int col = 0; col < Maze.ColumnCount; col++)
             {
-                tileMapLayer.SetCell(new Vector2I(col, row), sourceId, GetAtlasCoords(maze.GetCell(col, row).CellType));
+                tileMapLayer.SetCell(new Vector2I(col, row), 1, GetAtlasCoords(Maze.GetCell(col, row).CellType));
             }
         }
     }
@@ -54,5 +60,10 @@ public partial class GameManager : Node
             default:
                 return Empty;
         }
+    }
+
+    public static Vector2 GetPosition(MazeLocation location)
+    {
+        return new Vector2(location.Column * 16 - 8, location.Row * 16 + 24);
     }
 }

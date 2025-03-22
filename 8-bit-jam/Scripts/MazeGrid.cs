@@ -12,6 +12,8 @@ public class MazeGrid
 
     public int ColumnCount { get; private set; }
 
+    public MazeLocation PlayerStartLocation { get; private set; }
+
     private MazeGrid(bool[,] verticalWalls, bool[,] horizontalWalls)
     {
         RowCount = (height * 2) + 1;
@@ -24,6 +26,8 @@ public class MazeGrid
         AddVerticalWalls(verticalWalls);
         AddHorizontalWalls(horizontalWalls);
         AddSpaces();
+
+        PlayerStartLocation = new MazeLocation(2, 2);
 
         #region MazeString
 
