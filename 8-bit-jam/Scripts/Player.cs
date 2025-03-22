@@ -32,6 +32,9 @@ public partial class Player : MazeExplorer
 
     public override void _Process(double delta)
     {
+        if (GameManager.IsGameOver)
+            return;
+
         SetDirection(Right, Direction.Right);
         SetDirection(Down, Direction.Down);
         SetDirection(Left, Direction.Left);

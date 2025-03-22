@@ -24,7 +24,9 @@ public partial class GameManager : Node
 
     [Export] PackedScene EnemyPrefab;
 
-    int count = 0;
+    public static bool IsGameOver { get; private set; }
+
+    private int count = 0;
 
     public override void _EnterTree()
     {
@@ -71,8 +73,11 @@ public partial class GameManager : Node
         Enemies.Add(enemy);
     }
 
-    public static void GameOver()
+    public static async void GameOver()
     {
+        IsGameOver = true;
+
+        await _instance.ToSignal(_instance.GetTree().CreateTimer(0.5f), SceneTreeTimer.SignalName.Timeout);
         _instance.GetTree().ChangeSceneToFile(@"res://Scenes/Main.tscn");
     }
 
