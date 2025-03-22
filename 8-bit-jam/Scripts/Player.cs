@@ -1,21 +1,19 @@
 ﻿using Godot;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-public partial class Player : Node2D
+public partial class Player : MazeExplorer
 {
-    public MazeLocation Location { get; private set; }
-
     private Node2D Right;
     private Node2D Down;
     private Node2D Left;
     private Node2D Up;
 
+    public static event Action PlayerMoved;
+
     public override void _Ready()
     {
+        base._Ready();
+
         Right = GetNode<Node2D>("Right");
         Down = GetNode<Node2D>("Down");
         Left = GetNode<Node2D>("Left");
@@ -47,34 +45,8 @@ public partial class Player : Node2D
         Up.Visible = GameManager.Maze.CanMove(Location, Direction.Up);
     }
 
-    public void SetLocation(MazeLocation location)
+    protected override void OnMoved(Direction direction)
     {
-        Location = location;
-        Position = GameManager.GetPosition(Location);
-    }
-
-    private void TryMove(Direction direction)
-    {
-        if (GameManager.Maze.CanMove(Location, direction))
-        {
-            switch (direction)
-            {
-                case Direction.Right:
-                    SetLocation(new MazeLocation(Location.Column + 1, Location.Row));
-                    return;
-
-                case Direction.Down:
-                    SetLocation(new MazeLocation(Location.Column, Location.Row + 1));
-                    return;
-
-                case Direction.Left:
-                    SetLocation(new MazeLocation(Location.Column - 1, Location.Row));
-                    return;
-
-                case Direction.Up:
-                    SetLocation(new MazeLocation(Location.Column, Location.Row - 1));
-                    return;
-            }
-        }
+        PlayerMoved?.Invoke();
     }
 }

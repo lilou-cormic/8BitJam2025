@@ -8,16 +8,17 @@ public class MazeGrid
 
     private MazeCell[,] MazeCells { get; }
 
-    public int RowCount { get; private set; }
+    public const int RowCount = (height * 2) + 1;
 
-    public int ColumnCount { get; private set; }
+    public const int ColumnCount = (width * 2) + 1;
+
+    public MazeLocation Entrance { get; }
 
     public MazeLocation PlayerStartLocation { get; private set; }
 
     private MazeGrid(bool[,] verticalWalls, bool[,] horizontalWalls)
     {
-        RowCount = (height * 2) + 1;
-        ColumnCount = (width * 2) + 1;
+        Entrance = new MazeLocation(ColumnCount - 4, RowCount - 1);
 
         MazeCells = new MazeCell[ColumnCount, RowCount];
 
@@ -191,7 +192,12 @@ public class MazeGrid
 
         MazeCells[2, 2] = new MazeCell(CellType.Space);
 
-        MazeCells[ColumnCount - 4, RowCount - 1] = new MazeCell(CellType.Space);
+        MazeCells[Entrance.Column, Entrance.Row] = new MazeCell(CellType.Space);
+    }
+
+    public MazeCell GetCell(MazeLocation location)
+    {
+        return MazeCells[location.Column, location.Row];
     }
 
     public MazeCell GetCell(int column, int row)
@@ -201,23 +207,24 @@ public class MazeGrid
 
     public bool CanMove(MazeLocation currentLocation, Direction direction)
     {
+        MazeLocation adjacentLocation = currentLocation.GetAdjacent(direction);
+
+        if (adjacentLocation == null)
+            return false;
+
         switch (direction)
         {
             case Direction.Right:
-                return currentLocation.Column < ColumnCount - 1
-                    && GetCell(currentLocation.Column + 1, currentLocation.Row).IsWalkable;
+                return currentLocation.Column < ColumnCount - 1 && GetCell(adjacentLocation).IsWalkable;
 
             case Direction.Down:
-                return currentLocation.Row < RowCount - 1
-                    && GetCell(currentLocation.Column, currentLocation.Row + 1).IsWalkable;
+                return currentLocation.Row < RowCount - 1 && GetCell(adjacentLocation).IsWalkable;
 
             case Direction.Left:
-                return currentLocation.Column > 0
-                    && GetCell(currentLocation.Column - 1, currentLocation.Row).IsWalkable;
+                return currentLocation.Column > 0 && GetCell(adjacentLocation).IsWalkable;
 
             case Direction.Up:
-                return currentLocation.Row > 0
-                    && GetCell(currentLocation.Column, currentLocation.Row - 1).IsWalkable;
+                return currentLocation.Row > 0 && GetCell(adjacentLocation).IsWalkable;
 
             case Direction.None:
             default:

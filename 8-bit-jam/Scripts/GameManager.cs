@@ -13,7 +13,6 @@ public partial class GameManager : Node
     private static Vector2I VerticalWall = new(48, 10);
     private static Vector2I Intersection = new(48, 10);
     private static Vector2I Empty = new(-1, -1);
-    private static Vector2I Floor = new(19, 1);
 
     public static Player Player { get; private set; }
 
@@ -26,9 +25,9 @@ public partial class GameManager : Node
 
         TileMapLayer tileMapLayer = GetNode<TileMapLayer>("%TileMapLayer");
 
-        for (int row = 0; row < Maze.RowCount; row++)
+        for (int row = 0; row < MazeGrid.RowCount; row++)
         {
-            for (int col = 0; col < Maze.ColumnCount; col++)
+            for (int col = 0; col < MazeGrid.ColumnCount; col++)
             {
                 tileMapLayer.SetCell(new Vector2I(col, row), 1, GetAtlasCoords(Maze.GetCell(col, row).CellType));
             }

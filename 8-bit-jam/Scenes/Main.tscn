@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=10 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="Texture2D" uid="uid://bmvh6md676f4n" path="res://Images/monochrome-transparent_packed.png" id="2_5kmac"]
 [ext_resource type="Texture2D" uid="uid://b0mxq1ev47708" path="res://Images/Minotaur.png" id="3_tdvs7"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="4_663sx"]
 [ext_resource type="Texture2D" uid="uid://cdqvo04t2rjbq" path="res://Images/CellSelect.tres" id="5_8vct7"]
+[ext_resource type="Texture2D" uid="uid://dv6c2m25biq6f" path="res://Images/SwordGuy.tres" id="6_s4wm3"]
+[ext_resource type="Script" path="res://Scripts/Enemy.cs" id="7_tc7gg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qri6o"]
 texture = ExtResource("2_5kmac")
@@ -1106,6 +1108,7 @@ script = ExtResource("1_hyjow")
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
 self_modulate = Color(0.721569, 0.721569, 0.721569, 1)
+z_index = -1
 position = Vector2(-8, 24)
 tile_set = SubResource("TileSet_3a6nl")
 
@@ -1136,3 +1139,9 @@ offset = Vector2(-16, 0)
 texture = ExtResource("5_8vct7")
 centered = false
 offset = Vector2(0, -16)
+
+[node name="Enemy" type="Sprite2D" parent="."]
+position = Vector2(200, 200)
+texture = ExtResource("6_s4wm3")
+centered = false
+script = ExtResource("7_tc7gg")

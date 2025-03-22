@@ -52,4 +52,24 @@ public class MazeLocation : IEquatable<MazeLocation>
     {
         return !(a == b);
     }
+
+    public MazeLocation GetAdjacent(Direction direction)
+    {
+        switch (direction)
+        {
+            case Direction.Right:
+                return new MazeLocation(Column + 1, Row);
+
+            case Direction.Down:
+                return new MazeLocation(Column, Row + 1);
+
+            case Direction.Left:
+                return new MazeLocation(Column - 1, Row);
+
+            case Direction.Up:
+                return new MazeLocation(Column, Row - 1);
+        }
+
+        return null;
+    }
 }
