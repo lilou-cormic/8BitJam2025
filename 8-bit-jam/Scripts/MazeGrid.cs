@@ -63,7 +63,7 @@ public class MazeGrid
                         mazeString.Append("  ");
                         break;
                     default:
-                        mazeString.Append("{}");
+                        mazeString.Append("  ");
                         break;
                 }
             }
@@ -185,7 +185,7 @@ public class MazeGrid
             }
         }
 
-        MazeCells[2, 2] = new MazeCell(CellType.Unknown);
+        MazeCells[2, 2] = new MazeCell(CellType.Space);
 
         MazeCells[ColumnCount - 4, RowCount - 1] = new MazeCell(CellType.Space);
     }
