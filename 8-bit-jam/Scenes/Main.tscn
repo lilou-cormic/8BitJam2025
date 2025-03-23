@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=23 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="AudioStream" uid="uid://dw4yybx28ea85" path="res://Musics/descent.ogg" id="1_uul6c"]
@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://Scripts/ScoreText.cs" id="11_mye68"]
 [ext_resource type="AudioStream" uid="uid://dw3887yi3uvyg" path="res://Sounds/gameover3.ogg" id="14_h2rpe"]
 [ext_resource type="AudioStream" uid="uid://dtefdmerfogpf" path="res://Sounds/explosion2.ogg" id="15_2grs4"]
+[ext_resource type="Script" path="res://Scripts/BerserkCountText.cs" id="15_3guer"]
 [ext_resource type="Texture2D" uid="uid://f5s74urkkrhf" path="res://Images/BerserkMode.tres" id="15_fetii"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qri6o"]
@@ -1223,40 +1224,50 @@ self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
 position = Vector2(16, 16)
 texture = ExtResource("9_illg4")
 
+[node name="BerserkCountText" type="Label" parent="."]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
+offset_left = 88.0
+offset_top = 16.0
+offset_right = 104.0
+offset_bottom = 24.0
+theme_override_font_sizes/font_size = 8
+text = "x0"
+script = ExtResource("15_3guer")
+
 [node name="TopScoreLabel" type="Label" parent="."]
 self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
-offset_left = 104.0
-offset_top = 10.0
-offset_right = 168.0
-offset_bottom = 18.0
+offset_left = 122.0
+offset_top = 8.0
+offset_right = 186.0
+offset_bottom = 16.0
 theme_override_font_sizes/font_size = 8
 text = "TOP"
 
 [node name="TopScoreText" type="Label" parent="."]
 self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
-offset_left = 104.0
-offset_top = 18.0
-offset_right = 168.0
-offset_bottom = 26.0
+offset_left = 122.0
+offset_top = 16.0
+offset_right = 186.0
+offset_bottom = 24.0
 theme_override_font_sizes/font_size = 8
 text = "000000"
 script = ExtResource("10_dypdi")
 
 [node name="ScoreLabel" type="Label" parent="."]
 self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
-offset_left = 190.0
-offset_top = 10.0
-offset_right = 254.0
-offset_bottom = 18.0
+offset_left = 186.0
+offset_top = 8.0
+offset_right = 250.0
+offset_bottom = 16.0
 theme_override_font_sizes/font_size = 8
 text = "SCORE"
 
 [node name="ScoreText" type="Label" parent="."]
 self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
-offset_left = 190.0
-offset_top = 18.0
-offset_right = 254.0
-offset_bottom = 26.0
+offset_left = 186.0
+offset_top = 16.0
+offset_right = 250.0
+offset_bottom = 24.0
 theme_override_font_sizes/font_size = 8
 text = "000000"
 script = ExtResource("11_mye68")

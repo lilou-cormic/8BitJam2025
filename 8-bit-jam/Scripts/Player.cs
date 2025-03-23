@@ -1,7 +1,6 @@
 ﻿using Godot;
 using System;
 using System.Linq;
-using static Godot.TextServer;
 
 public partial class Player : MazeExplorer
 {
@@ -12,6 +11,7 @@ public partial class Player : MazeExplorer
 
     public static event Action PlayerMoved;
     public static event Action PlayerHPChanged;
+    public static event Action BerserkCountChanged;
 
     public int MaxHP = 3;
 
@@ -19,8 +19,10 @@ public partial class Player : MazeExplorer
 
     private bool _isHurting = false;
 
-    private bool _canGoBerserk = true;
+    private bool CanGoBerserk => BerserkCount > 0;
     private bool _isBerserk = false;
+
+    public int BerserkCount { get; private set; }
 
     public override void _EnterTree()
     {
@@ -34,6 +36,7 @@ public partial class Player : MazeExplorer
         base._Ready();
 
         HP = MaxHP;
+        BerserkCount = 1;
 
         Right = GetNode<Sprite2D>("Right");
         Down = GetNode<Sprite2D>("Down");
@@ -55,7 +58,7 @@ public partial class Player : MazeExplorer
 
         if (Input.IsActionJustPressed("A-button"))
         {
-            if (_canGoBerserk)
+            if (CanGoBerserk)
                 _isBerserk = true;
         }
         else if (Input.IsActionJustPressed("B-button"))
@@ -109,7 +112,7 @@ public partial class Player : MazeExplorer
     private void SetBerserkIcon()
     {
         GetNode<Sprite2D>("%BerserkFrame").SelfModulate = _isBerserk ? ColorPalette.Brown : ColorPalette.White;
-        GetNode<Sprite2D>("%BerserkAvailable").Visible = _canGoBerserk;
+        GetNode<Sprite2D>("%BerserkAvailable").Visible = CanGoBerserk;
     }
 
     private Color GetCellSelectColor(MazeLocation location)
@@ -128,10 +131,7 @@ public partial class Player : MazeExplorer
         enemy.Damage(_isBerserk);
 
         if (_isBerserk)
-        {
-            _isBerserk = false;
-            _canGoBerserk = false;
-        }
+            UseBerserkEnergy();
 
         OnMoved(Direction.None);
     }
@@ -148,8 +148,7 @@ public partial class Player : MazeExplorer
     {
         if (_isBerserk)
         {
-            _isBerserk = false;
-            _canGoBerserk = false;
+            UseBerserkEnergy();
 
             GetNode<AudioStreamPlayer2D>("NoHurtSoundPlayer").Play();
         }
@@ -184,8 +183,7 @@ public partial class Player : MazeExplorer
         if (_isBerserk && GameManager.IsWallOrPillarThere(location))
         {
             GameManager.DestroyWall(location);
-            _isBerserk = false;
-            _canGoBerserk = false;
+            UseBerserkEnergy();
         }
 
         bool moved = base.TryMove(direction);
@@ -194,6 +192,16 @@ public partial class Player : MazeExplorer
             GetNode<AudioStreamPlayer2D>("WalkSoundPlayer").Play();
 
         return moved;
+    }
+
+    private void UseBerserkEnergy()
+    {
+        _isBerserk = false;
+
+        if (BerserkCount > 0)
+            BerserkCount--;
+
+        BerserkCountChanged?.Invoke();
     }
 
     protected override void OnMoved(Direction direction)
@@ -205,7 +213,11 @@ public partial class Player : MazeExplorer
     {
         if (ScoreManager.Score % 500 == 0)
         {
-            _canGoBerserk = true;
+            if (BerserkCount < 9)
+                BerserkCount++;
+
+            BerserkCountChanged?.Invoke();
+
             GetNode<AudioStreamPlayer2D>("BerserkGetSoundPlayer").Play();
         }
     }
