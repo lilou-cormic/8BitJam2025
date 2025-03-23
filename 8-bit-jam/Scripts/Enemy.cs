@@ -38,7 +38,7 @@ public partial class Enemy : MazeExplorer
         if (_isDead)
             return;
 
-        GetNode<AudioStreamPlayer2D>("HurtSoundPlayer").Play();
+        GetNode<AudioStreamPlayer2D>(doublePoints ? "BigHurtSoundPlayer" : "HurtSoundPlayer").Play();
 
         ScoreManager.Add(100 * (doublePoints ? 2 : 1));
 

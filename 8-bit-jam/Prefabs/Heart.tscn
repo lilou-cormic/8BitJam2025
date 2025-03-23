@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://pdhixu6b0a13"]
+
+[ext_resource type="Script" path="res://Scripts/Heart.cs" id="1_tj8v6"]
+[ext_resource type="Texture2D" uid="uid://bawfxluypo720" path="res://Images/HeartBorder.tres" id="2_hhs3q"]
+[ext_resource type="Texture2D" uid="uid://weqa7p3hl7fj" path="res://Images/HeartHalf.tres" id="3_y6i7t"]
+[ext_resource type="Texture2D" uid="uid://fctqpmxh5v06" path="res://Images/HeartFull.tres" id="4_dc8gs"]
+
+[node name="Heart" type="Node2D"]
+position = Vector2(16, 16)
+script = ExtResource("1_tj8v6")
+
+[node name="HeartBorder" type="Sprite2D" parent="."]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
+z_index = 1
+texture = ExtResource("2_hhs3q")
+
+[node name="HeartHalf" type="Sprite2D" parent="."]
+self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
+texture = ExtResource("3_y6i7t")
+
+[node name="HeartFull" type="Sprite2D" parent="."]
+self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
+texture = ExtResource("4_dc8gs")

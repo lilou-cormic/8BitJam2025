@@ -13,9 +13,9 @@ public partial class Player : MazeExplorer
     public static event Action PlayerHPChanged;
     public static event Action BerserkCountChanged;
 
-    public int MaxHP = 3;
+    public int MaxHP = 6;
 
-    public int HP = 3;
+    public int HP = 6;
 
     private bool _isHurting = false;
 

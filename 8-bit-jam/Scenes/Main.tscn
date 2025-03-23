@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=21 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="AudioStream" uid="uid://dw4yybx28ea85" path="res://Musics/descent.ogg" id="1_uul6c"]
@@ -7,15 +7,13 @@
 [ext_resource type="Texture2D" uid="uid://b0mxq1ev47708" path="res://Images/Minotaur.png" id="3_tdvs7"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="4_663sx"]
 [ext_resource type="Texture2D" uid="uid://cdqvo04t2rjbq" path="res://Images/CellSelect.tres" id="5_8vct7"]
-[ext_resource type="Script" path="res://Scripts/Heart.cs" id="7_8m3qh"]
 [ext_resource type="AudioStream" uid="uid://cumrq5tiep82h" path="res://Sounds/hit4.ogg" id="8_870y0"]
-[ext_resource type="Texture2D" uid="uid://bawfxluypo720" path="res://Images/HeartBorder.tres" id="8_gnwfo"]
 [ext_resource type="AudioStream" uid="uid://l50re8004amd" path="res://Sounds/hit5.ogg" id="9_5euid"]
 [ext_resource type="AudioStream" uid="uid://6kdawlxci0ov" path="res://Sounds/hit3.ogg" id="9_bufor"]
-[ext_resource type="Texture2D" uid="uid://fctqpmxh5v06" path="res://Images/HeartFull.tres" id="9_illg4"]
 [ext_resource type="Script" path="res://Scripts/TopScoreText.cs" id="10_dypdi"]
 [ext_resource type="AudioStream" uid="uid://dpuw4wv2r3t7q" path="res://Sounds/upgrade4.ogg" id="10_io0u7"]
 [ext_resource type="Script" path="res://Scripts/ScoreText.cs" id="11_mye68"]
+[ext_resource type="PackedScene" uid="uid://pdhixu6b0a13" path="res://Prefabs/Heart.tscn" id="12_yputa"]
 [ext_resource type="AudioStream" uid="uid://dw3887yi3uvyg" path="res://Sounds/gameover3.ogg" id="14_h2rpe"]
 [ext_resource type="AudioStream" uid="uid://dtefdmerfogpf" path="res://Sounds/explosion2.ogg" id="15_2grs4"]
 [ext_resource type="Script" path="res://Scripts/BerserkCountText.cs" id="15_3guer"]
@@ -1178,51 +1176,15 @@ stream = ExtResource("9_bufor")
 [node name="BerserkGetSoundPlayer" type="AudioStreamPlayer2D" parent="Player"]
 stream = ExtResource("10_io0u7")
 
-[node name="Heart1" type="Node2D" parent="."]
-script = ExtResource("7_8m3qh")
+[node name="Heart1" parent="." instance=ExtResource("12_yputa")]
 
-[node name="HeartBorder" type="Sprite2D" parent="Heart1"]
-self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
-z_index = 1
-position = Vector2(16, 16)
-texture = ExtResource("8_gnwfo")
-
-[node name="HeartFull" type="Sprite2D" parent="Heart1"]
-self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
-position = Vector2(16, 16)
-texture = ExtResource("9_illg4")
-
-[node name="Heart2" type="Node2D" parent="."]
-position = Vector2(16, 0)
-script = ExtResource("7_8m3qh")
+[node name="Heart2" parent="." instance=ExtResource("12_yputa")]
+position = Vector2(32, 16)
 Number = 2
 
-[node name="HeartBorder" type="Sprite2D" parent="Heart2"]
-self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
-z_index = 1
-position = Vector2(16, 16)
-texture = ExtResource("8_gnwfo")
-
-[node name="HeartFull" type="Sprite2D" parent="Heart2"]
-self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
-position = Vector2(16, 16)
-texture = ExtResource("9_illg4")
-
-[node name="Heart3" type="Node2D" parent="."]
-position = Vector2(32, 0)
-script = ExtResource("7_8m3qh")
+[node name="Heart3" parent="." instance=ExtResource("12_yputa")]
+position = Vector2(48, 16)
 Number = 3
-
-[node name="HeartBorder" type="Sprite2D" parent="Heart3"]
-self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
-z_index = 1
-position = Vector2(16, 16)
-texture = ExtResource("8_gnwfo")
-
-[node name="HeartFull" type="Sprite2D" parent="Heart3"]
-self_modulate = Color(0.709804, 0.196078, 0.12549, 1)
-position = Vector2(16, 16)
-texture = ExtResource("9_illg4")
 
 [node name="BerserkCountText" type="Label" parent="."]
 self_modulate = Color(0.996078, 0.996078, 0.996078, 1)

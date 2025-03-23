@@ -1,6 +1,6 @@
 ﻿using Godot;
 
-public partial class Heart: Node2D
+public partial class Heart : Node2D
 {
     [Export] int Number = 1;
 
@@ -16,6 +16,7 @@ public partial class Heart: Node2D
 
     private void Player_PlayerHPChanged()
     {
-        GetNode<Sprite2D>("HeartFull").Visible = GameManager.Player.HP >= Number;
+        GetNode<Sprite2D>("HeartHalf").Visible = GameManager.Player.HP >= Number * 2 - 1;
+        GetNode<Sprite2D>("HeartFull").Visible = GameManager.Player.HP >= Number * 2;
     }
 }
