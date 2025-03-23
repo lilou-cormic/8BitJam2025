@@ -1,5 +1,6 @@
-[gd_scene load_steps=14 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=17 format=3 uid="uid://bijha5yg76gec"]
 
+[ext_resource type="AudioStream" uid="uid://doy0k0dubgurp" path="res://Musics/night-chip.ogg" id="1_0o8lq"]
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="Texture2D" uid="uid://bmvh6md676f4n" path="res://Images/monochrome-transparent_packed.png" id="2_5kmac"]
 [ext_resource type="PackedScene" uid="uid://dr01yugnp7cf3" path="res://Prefabs/Enemy.tscn" id="2_apvhn"]
@@ -7,10 +8,12 @@
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="4_663sx"]
 [ext_resource type="Texture2D" uid="uid://cdqvo04t2rjbq" path="res://Images/CellSelect.tres" id="5_8vct7"]
 [ext_resource type="Script" path="res://Scripts/Heart.cs" id="7_8m3qh"]
+[ext_resource type="AudioStream" uid="uid://cumrq5tiep82h" path="res://Sounds/hit4.ogg" id="8_870y0"]
 [ext_resource type="Texture2D" uid="uid://bawfxluypo720" path="res://Images/HeartBorder.tres" id="8_gnwfo"]
 [ext_resource type="Texture2D" uid="uid://fctqpmxh5v06" path="res://Images/HeartFull.tres" id="9_illg4"]
 [ext_resource type="Script" path="res://Scripts/TopScoreText.cs" id="10_dypdi"]
 [ext_resource type="Script" path="res://Scripts/ScoreText.cs" id="11_mye68"]
+[ext_resource type="AudioStream" uid="uid://dw3887yi3uvyg" path="res://Sounds/gameover3.ogg" id="14_h2rpe"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qri6o"]
 texture = ExtResource("2_5kmac")
@@ -1098,6 +1101,12 @@ sources/1 = SubResource("TileSetAtlasSource_qri6o")
 
 [node name="Main" type="Node2D"]
 
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("1_0o8lq")
+volume_db = -3.0
+autoplay = true
+
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -1
 offset_left = -17.0
@@ -1149,6 +1158,9 @@ self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 texture = ExtResource("5_8vct7")
 centered = false
 offset = Vector2(0, -16)
+
+[node name="HurtSoundPlayer" type="AudioStreamPlayer2D" parent="Player"]
+stream = ExtResource("8_870y0")
 
 [node name="Heart1" type="Node2D" parent="."]
 script = ExtResource("7_8m3qh")
@@ -1247,3 +1259,7 @@ offset_right = 76.0
 offset_bottom = 12.0
 theme_override_font_sizes/font_size = 8
 text = "GAME OVER"
+
+[node name="GameOverSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("14_h2rpe")

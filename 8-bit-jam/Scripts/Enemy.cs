@@ -35,6 +35,8 @@ public partial class Enemy : MazeExplorer
         if (_isDead)
             return;
 
+        GetNode<AudioStreamPlayer2D>("HurtSoundPlayer").Play();
+
         ScoreManager.Add(100);
 
         _isDead = true;

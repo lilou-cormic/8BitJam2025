@@ -92,8 +92,10 @@ public partial class GameManager : Node
     {
         _instance._IsGameOver = true;
         _instance.GetNode<ColorRect>("%GameOverPanel").Visible = true;
+        _instance.GetNode<AudioStreamPlayer>("%MusicPlayer").Stop();
+        _instance.GetNode<AudioStreamPlayer2D>("%GameOverSoundPlayer").Play();
 
-        await _instance.ToSignal(_instance.GetTree().CreateTimer(0.5f), SceneTreeTimer.SignalName.Timeout);
+        await _instance.ToSignal(_instance.GetTree().CreateTimer(1f), SceneTreeTimer.SignalName.Timeout);
         _instance._canRestart = true;
     }
 

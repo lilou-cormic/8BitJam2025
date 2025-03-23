@@ -89,6 +89,8 @@ public partial class Player : MazeExplorer
         if (HP <= 0)
             GameManager.GameOver();
 
+        GetNode<AudioStreamPlayer2D>("HurtSoundPlayer").Play();
+
         SelfModulate = ColorPalette.Red;
         await ToSignal(GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
         SelfModulate = ColorPalette.Brown;
