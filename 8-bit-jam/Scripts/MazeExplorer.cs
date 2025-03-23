@@ -8,7 +8,7 @@ public partial class MazeExplorer : Sprite2D
 
     protected virtual bool CanMove(Direction direction)
     {
-        return GameManager.Maze.CanMove(Location, direction);
+        return GameManager.CanMove(Location, direction);
     }
 
     protected bool HasExplored(MazeLocation location)

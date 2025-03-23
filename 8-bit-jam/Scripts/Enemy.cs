@@ -15,7 +15,7 @@ public partial class Enemy : MazeExplorer
     {
         base._Ready();
 
-        SetLocation(GameManager.Maze.Entrance);
+        SetLocation(GameManager.Entrance);
 
         SelfModulate = ColorPalette.White;
     }
@@ -32,6 +32,11 @@ public partial class Enemy : MazeExplorer
 
     public async void Damage()
     {
+        if (_isDead)
+            return;
+
+        ScoreManager.Add(100);
+
         _isDead = true;
 
         GameManager.Enemies.Remove(this);

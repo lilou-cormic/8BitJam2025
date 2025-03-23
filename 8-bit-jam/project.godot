@@ -32,6 +32,10 @@ window/vsync/vsync_mode=0
 
 project/assembly_name="8 Bit Jam"
 
+[gui]
+
+theme/custom_font="res://Fonts/nintendo-nes-font/nintendo-nes-font.ttf"
+
 [layer_names]
 
 2d_render/layer_1="Background"

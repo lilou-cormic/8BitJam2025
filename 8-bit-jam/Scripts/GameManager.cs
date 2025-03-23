@@ -6,7 +6,9 @@ public partial class GameManager : Node
 {
     private static GameManager _instance;
 
-    public static MazeGrid Maze { get; private set; }
+    private MazeGrid Maze;
+
+    public static MazeLocation Entrance => _instance?.Maze?.Entrance;
 
     private static Vector2I LeftBorder = new(20, 1);
     private static Vector2I TopBorder = new(19, 2);
@@ -24,7 +26,10 @@ public partial class GameManager : Node
 
     [Export] PackedScene EnemyPrefab;
 
-    public static bool IsGameOver { get; private set; }
+    private bool _IsGameOver = false;
+    public static bool IsGameOver => _instance._IsGameOver;
+
+    private bool _canRestart = false;
 
     private int count = 0;
 
@@ -36,6 +41,8 @@ public partial class GameManager : Node
     public override void _Ready()
     {
         _instance = this;
+
+        ScoreManager.Reset();
 
         Maze = MazeGrid.CreateMaze();
 
@@ -73,12 +80,27 @@ public partial class GameManager : Node
         Enemies.Add(enemy);
     }
 
+    public static bool CanMove(MazeLocation currentLocation, Direction direction)
+    {
+        if (IsGameOver)
+            return false;
+
+        return _instance.Maze.CanMove(currentLocation, direction);
+    }
+
     public static async void GameOver()
     {
-        IsGameOver = true;
+        _instance._IsGameOver = true;
+        _instance.GetNode<ColorRect>("%GameOverPanel").Visible = true;
 
         await _instance.ToSignal(_instance.GetTree().CreateTimer(0.5f), SceneTreeTimer.SignalName.Timeout);
-        _instance.GetTree().ChangeSceneToFile(@"res://Scenes/Main.tscn");
+        _instance._canRestart = true;
+    }
+
+    public override void _Process(double delta)
+    {
+        if (_IsGameOver && _canRestart && Input.IsAnythingPressed())
+            _instance.GetTree().ChangeSceneToFile(@"res://Scenes/Main.tscn");
     }
 
     private Vector2I GetAtlasCoords(CellType cellType)

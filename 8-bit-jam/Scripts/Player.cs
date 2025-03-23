@@ -32,13 +32,13 @@ public partial class Player : MazeExplorer
 
     public override void _Process(double delta)
     {
-        if (GameManager.IsGameOver)
-            return;
-
         SetDirection(Right, Direction.Right);
         SetDirection(Down, Direction.Down);
         SetDirection(Left, Direction.Left);
         SetDirection(Up, Direction.Up);
+
+        if (GameManager.IsGameOver)
+            return;
 
         if (Input.IsActionJustPressed("ui_right"))
         {
@@ -60,7 +60,7 @@ public partial class Player : MazeExplorer
 
     private void SetDirection(Sprite2D sprite, Direction direction)
     {
-        sprite.Visible = GameManager.Maze.CanMove(Location, direction);
+        sprite.Visible = GameManager.CanMove(Location, direction);
 
         sprite.SelfModulate = GameManager.IsEnemyThere(Location.GetAdjacent(direction)) ? ColorPalette.Red : ColorPalette.White;
     }
@@ -74,7 +74,7 @@ public partial class Player : MazeExplorer
 
     protected override bool CanMove(Direction direction)
     {
-        if (Location.GetAdjacent(direction) == GameManager.Maze.Entrance)
+        if (Location.GetAdjacent(direction) == GameManager.Entrance)
             return false;
 
         return base.CanMove(direction);
