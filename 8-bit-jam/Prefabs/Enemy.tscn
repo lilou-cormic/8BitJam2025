@@ -1,16 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://dr01yugnp7cf3"]
+[gd_scene load_steps=6 format=3 uid="uid://dr01yugnp7cf3"]
 
 [ext_resource type="Texture2D" uid="uid://dv6c2m25biq6f" path="res://Images/SwordGuy.tres" id="1_lqira"]
 [ext_resource type="Script" path="res://Scripts/Enemy.cs" id="2_ssrpv"]
 [ext_resource type="AudioStream" uid="uid://dlmmsibadadn2" path="res://Sounds/hit1.ogg" id="3_h6p1f"]
-[ext_resource type="PackedScene" uid="uid://dqecl25b134ee" path="res://Prefabs/Points.tscn" id="3_pra4f"]
+[ext_resource type="PackedScene" uid="uid://cqs7l3epg0hyq" path="res://Prefabs/Pts0100.tscn" id="3_vidbj"]
+[ext_resource type="PackedScene" uid="uid://cx8c2yntqsscu" path="res://Prefabs/Pts0200.tscn" id="4_0rlor"]
 
 [node name="Enemy" type="Sprite2D"]
 self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 texture = ExtResource("1_lqira")
 centered = false
 script = ExtResource("2_ssrpv")
-PointsPrefab = ExtResource("3_pra4f")
+PointsPrefab = ExtResource("3_vidbj")
+DoublePtsPrefab = ExtResource("4_0rlor")
 
 [node name="HurtSoundPlayer" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_h6p1f")

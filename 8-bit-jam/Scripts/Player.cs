@@ -115,7 +115,7 @@ public partial class Player : MazeExplorer
     private Color GetCellSelectColor(MazeLocation location)
     {
         if (GameManager.IsEnemyThere(location))
-            return ColorPalette.Red;
+            return _isBerserk ? ColorPalette.Blue : ColorPalette.Red;
 
         if (GameManager.IsWallOrPillarThere(location))
             return ColorPalette.Blue;
@@ -125,13 +125,13 @@ public partial class Player : MazeExplorer
 
     public void Attack(Enemy enemy)
     {
+        enemy.Damage(_isBerserk);
+
         if (_isBerserk)
         {
             _isBerserk = false;
             _canGoBerserk = false;
         }
-
-        enemy.Damage();
 
         OnMoved(Direction.None);
     }
@@ -188,7 +188,12 @@ public partial class Player : MazeExplorer
             _canGoBerserk = false;
         }
 
-        return base.TryMove(direction);
+        bool moved = base.TryMove(direction);
+
+        if (moved)
+            GetNode<AudioStreamPlayer2D>("WalkSoundPlayer").Play();
+
+        return moved;
     }
 
     protected override void OnMoved(Direction direction)
@@ -199,6 +204,9 @@ public partial class Player : MazeExplorer
     private void ScoreManager_ScoreChanged()
     {
         if (ScoreManager.Score % 500 == 0)
+        {
             _canGoBerserk = true;
+            GetNode<AudioStreamPlayer2D>("BerserkGetSoundPlayer").Play();
+        }
     }
 }

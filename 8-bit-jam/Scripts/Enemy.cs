@@ -3,6 +3,7 @@
 public partial class Enemy : MazeExplorer
 {
     [Export] PackedScene PointsPrefab;
+    [Export] PackedScene DoublePtsPrefab;
 
     private bool _isDead = false;
 
@@ -32,18 +33,18 @@ public partial class Enemy : MazeExplorer
         GameManager.Player.Damage();
     }
 
-    public async void Damage()
+    public async void Damage(bool doublePoints = false)
     {
         if (_isDead)
             return;
 
         GetNode<AudioStreamPlayer2D>("HurtSoundPlayer").Play();
 
-        ScoreManager.Add(100);
+        ScoreManager.Add(100 * (doublePoints ? 2 : 1));
 
         _isDead = true;
 
-        Points points = PointsPrefab.Instantiate<Points>();
+        Points points = (doublePoints ? DoublePtsPrefab : PointsPrefab).Instantiate<Points>();
         points.GlobalPosition = GlobalPosition;
         GetParent().AddChild(points);
 
