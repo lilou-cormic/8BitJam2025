@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=3 uid="uid://bijha5yg76gec"]
 
-[ext_resource type="AudioStream" uid="uid://doy0k0dubgurp" path="res://Musics/night-chip.ogg" id="1_0o8lq"]
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
+[ext_resource type="AudioStream" uid="uid://dw4yybx28ea85" path="res://Musics/descent.ogg" id="1_uul6c"]
 [ext_resource type="Texture2D" uid="uid://bmvh6md676f4n" path="res://Images/monochrome-transparent_packed.png" id="2_5kmac"]
 [ext_resource type="PackedScene" uid="uid://dr01yugnp7cf3" path="res://Prefabs/Enemy.tscn" id="2_apvhn"]
 [ext_resource type="Texture2D" uid="uid://b0mxq1ev47708" path="res://Images/Minotaur.png" id="3_tdvs7"]
@@ -1103,7 +1103,7 @@ sources/1 = SubResource("TileSetAtlasSource_qri6o")
 
 [node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
 unique_name_in_owner = true
-stream = ExtResource("1_0o8lq")
+stream = ExtResource("1_uul6c")
 volume_db = -3.0
 autoplay = true
 
@@ -1253,6 +1253,7 @@ offset_bottom = 136.0
 color = Color(0, 0, 0, 1)
 
 [node name="GameOverLabel" type="Label" parent="GameOverPanel"]
+layout_mode = 0
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 76.0

@@ -40,19 +40,19 @@ public partial class Player : MazeExplorer
         if (GameManager.IsGameOver)
             return;
 
-        if (Input.IsActionJustPressed("ui_right"))
+        if (Input.IsActionJustPressed("D-pad-right"))
         {
             TryMove(Direction.Right);
         }
-        else if (Input.IsActionJustPressed("ui_down"))
+        else if (Input.IsActionJustPressed("D-pad-down"))
         {
             TryMove(Direction.Down);
         }
-        else if (Input.IsActionJustPressed("ui_left"))
+        else if (Input.IsActionJustPressed("D-pad-left"))
         {
             TryMove(Direction.Left);
         }
-        else if (Input.IsActionJustPressed("ui_up"))
+        else if (Input.IsActionJustPressed("D-pad-up"))
         {
             TryMove(Direction.Up);
         }

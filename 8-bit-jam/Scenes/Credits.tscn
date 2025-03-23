@@ -1,0 +1,56 @@
+[gd_scene load_steps=3 format=3 uid="uid://dbxymwnl4760k"]
+
+[ext_resource type="Script" path="res://Scripts/Credits.cs" id="1_0heg0"]
+[ext_resource type="Texture2D" uid="uid://cw4mcwjdesd76" path="res://Images/Logo.png" id="1_kroot"]
+
+[node name="Credits" type="Node2D"]
+script = ExtResource("1_0heg0")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+z_index = -3
+offset_left = -17.0
+offset_top = -13.0
+offset_right = 279.0
+offset_bottom = 244.0
+color = Color(0, 0, 0, 1)
+
+[node name="Logo" type="Sprite2D" parent="."]
+z_index = -1
+texture = ExtResource("1_kroot")
+centered = false
+
+[node name="CopyrightLabel" type="Label" parent="."]
+offset_left = 12.0
+offset_top = 106.0
+offset_right = 244.0
+offset_bottom = 217.0
+theme_override_font_sizes/font_size = 8
+text = "GAME MADE FOR 8-BIT JAM 2025
+  BY 
+
+MUSIC ©2021 RETRO INDIE JOSH
+ CC BY 4.0
+
+ART & SFX KENNEY CC0
+
+“NINTENDO NES FONT” ©GOATMEAL
+ CC BY-NC-SA 3.0
+"
+
+[node name="LilouLabel" type="Label" parent="."]
+self_modulate = Color(0.921569, 0.623529, 0.137255, 1)
+offset_left = 52.0
+offset_top = 117.0
+offset_right = 144.0
+offset_bottom = 129.0
+theme_override_font_sizes/font_size = 8
+text = "LILOU CORMIC"
+
+[node name="LilouLabel2" type="Label" parent="."]
+self_modulate = Color(0.921569, 0.623529, 0.137255, 1)
+offset_left = 52.0
+offset_top = 119.0
+offset_right = 144.0
+offset_bottom = 131.0
+theme_override_font_sizes/font_size = 8
+text = "     -"

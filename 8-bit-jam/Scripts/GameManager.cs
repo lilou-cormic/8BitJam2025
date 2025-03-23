@@ -102,7 +102,7 @@ public partial class GameManager : Node
     public override void _Process(double delta)
     {
         if (_IsGameOver && _canRestart && Input.IsAnythingPressed())
-            _instance.GetTree().ChangeSceneToFile(@"res://Scenes/Main.tscn");
+            _instance.GetTree().ChangeSceneToFile(@"res://Scenes/Menu.tscn");
     }
 
     private Vector2I GetAtlasCoords(CellType cellType)
