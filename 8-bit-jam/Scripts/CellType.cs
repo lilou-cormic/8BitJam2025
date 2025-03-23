@@ -20,3 +20,23 @@
 
     Space = 9,
 }
+
+public static class CellTypeExtensions
+{
+    public static bool IsBorder(this CellType cellType)
+    {
+        return cellType == CellType.LeftBorder || cellType == CellType.RightBorder
+            || cellType == CellType.TopBorder || cellType == CellType.BottomBorder
+            || cellType == CellType.CornerBorder;
+    }
+
+    public static bool IsWallOrPillar(this CellType cellType)
+    {
+        return cellType == CellType.VerticalWall || cellType == CellType.HorizontalWall || cellType == CellType.Intersection;
+    }
+
+    public static bool IsWalkable(this CellType cellType)
+    {
+        return cellType == CellType.Space;
+    }
+}

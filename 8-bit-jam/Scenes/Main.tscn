@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=20 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="AudioStream" uid="uid://dw4yybx28ea85" path="res://Musics/descent.ogg" id="1_uul6c"]
@@ -10,10 +10,13 @@
 [ext_resource type="Script" path="res://Scripts/Heart.cs" id="7_8m3qh"]
 [ext_resource type="AudioStream" uid="uid://cumrq5tiep82h" path="res://Sounds/hit4.ogg" id="8_870y0"]
 [ext_resource type="Texture2D" uid="uid://bawfxluypo720" path="res://Images/HeartBorder.tres" id="8_gnwfo"]
+[ext_resource type="AudioStream" uid="uid://6kdawlxci0ov" path="res://Sounds/hit3.ogg" id="9_bufor"]
 [ext_resource type="Texture2D" uid="uid://fctqpmxh5v06" path="res://Images/HeartFull.tres" id="9_illg4"]
 [ext_resource type="Script" path="res://Scripts/TopScoreText.cs" id="10_dypdi"]
 [ext_resource type="Script" path="res://Scripts/ScoreText.cs" id="11_mye68"]
 [ext_resource type="AudioStream" uid="uid://dw3887yi3uvyg" path="res://Sounds/gameover3.ogg" id="14_h2rpe"]
+[ext_resource type="AudioStream" uid="uid://dtefdmerfogpf" path="res://Sounds/explosion2.ogg" id="15_2grs4"]
+[ext_resource type="Texture2D" uid="uid://f5s74urkkrhf" path="res://Images/BerserkMode.tres" id="15_fetii"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qri6o"]
 texture = ExtResource("2_5kmac")
@@ -1122,7 +1125,6 @@ EnemyPrefab = ExtResource("2_apvhn")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
-self_modulate = Color(0.721569, 0.721569, 0.721569, 1)
 z_index = -1
 position = Vector2(-8, 24)
 tile_set = SubResource("TileSet_3a6nl")
@@ -1162,6 +1164,9 @@ offset = Vector2(0, -16)
 
 [node name="HurtSoundPlayer" type="AudioStreamPlayer2D" parent="Player"]
 stream = ExtResource("8_870y0")
+
+[node name="NoHurtSoundPlayer" type="AudioStreamPlayer2D" parent="Player"]
+stream = ExtResource("9_bufor")
 
 [node name="Heart1" type="Node2D" parent="."]
 script = ExtResource("7_8m3qh")
@@ -1210,6 +1215,7 @@ position = Vector2(16, 16)
 texture = ExtResource("9_illg4")
 
 [node name="TopScoreLabel" type="Label" parent="."]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 offset_left = 104.0
 offset_top = 10.0
 offset_right = 168.0
@@ -1218,6 +1224,7 @@ theme_override_font_sizes/font_size = 8
 text = "TOP"
 
 [node name="TopScoreText" type="Label" parent="."]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 offset_left = 104.0
 offset_top = 18.0
 offset_right = 168.0
@@ -1227,6 +1234,7 @@ text = "000000"
 script = ExtResource("10_dypdi")
 
 [node name="ScoreLabel" type="Label" parent="."]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 offset_left = 190.0
 offset_top = 10.0
 offset_right = 254.0
@@ -1235,6 +1243,7 @@ theme_override_font_sizes/font_size = 8
 text = "SCORE"
 
 [node name="ScoreText" type="Label" parent="."]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 offset_left = 190.0
 offset_top = 18.0
 offset_right = 254.0
@@ -1265,3 +1274,19 @@ text = "GAME OVER"
 [node name="GameOverSoundPlayer" type="AudioStreamPlayer2D" parent="."]
 unique_name_in_owner = true
 stream = ExtResource("14_h2rpe")
+
+[node name="DestroyWallSoundPlayer" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("15_2grs4")
+
+[node name="BerserkFrame" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(80, 16)
+texture = ExtResource("5_8vct7")
+
+[node name="BerserkAvailable" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(0.0823529, 0.372549, 0.854902, 1)
+position = Vector2(80, 16)
+texture = ExtResource("15_fetii")

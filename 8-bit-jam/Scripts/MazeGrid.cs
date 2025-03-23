@@ -1,12 +1,11 @@
 ﻿using Godot;
-using System.Text;
 
 public class MazeGrid
 {
     private const int width = 8;
     private const int height = 6;
 
-    private MazeCell[,] MazeCells { get; }
+    private CellType[,] MazeCells { get; }
 
     public const int RowCount = (height * 2) + 1;
 
@@ -20,7 +19,7 @@ public class MazeGrid
     {
         Entrance = new MazeLocation(ColumnCount - 4, RowCount - 1);
 
-        MazeCells = new MazeCell[ColumnCount, RowCount];
+        MazeCells = new CellType[ColumnCount, RowCount];
 
         AddBorders();
         AddIntersections();
@@ -122,20 +121,20 @@ public class MazeGrid
 
         for (int row = minRow; row <= maxRow; row++)
         {
-            MazeCells[minColumn, row] = new MazeCell(CellType.LeftBorder);
-            MazeCells[maxColumn, row] = new MazeCell(CellType.RightBorder);
+            MazeCells[minColumn, row] = CellType.LeftBorder;
+            MazeCells[maxColumn, row] = CellType.RightBorder;
         }
 
         for (int column = minColumn; column <= maxColumn; column++)
         {
-            MazeCells[column, minRow] = new MazeCell(CellType.TopBorder);
-            MazeCells[column, maxRow] = new MazeCell(CellType.BottomBorder);
+            MazeCells[column, minRow] = CellType.TopBorder;
+            MazeCells[column, maxRow] = CellType.BottomBorder;
         }
 
-        MazeCells[minColumn, minRow] = new MazeCell(CellType.CornerBorder);
-        MazeCells[minColumn, maxRow] = new MazeCell(CellType.CornerBorder);
-        MazeCells[maxColumn, minRow] = new MazeCell(CellType.CornerBorder);
-        MazeCells[maxColumn, maxRow] = new MazeCell(CellType.CornerBorder);
+        MazeCells[minColumn, minRow] = CellType.CornerBorder;
+        MazeCells[minColumn, maxRow] = CellType.CornerBorder;
+        MazeCells[maxColumn, minRow] = CellType.CornerBorder;
+        MazeCells[maxColumn, maxRow] = CellType.CornerBorder;
     }
 
     private void AddIntersections()
@@ -144,7 +143,7 @@ public class MazeGrid
         {
             for (int row = 2; row < RowCount - 1; row += 2)
             {
-                MazeCells[column, row] = new MazeCell(CellType.Intersection);
+                MazeCells[column, row] = CellType.Intersection;
             }
         }
     }
@@ -155,7 +154,7 @@ public class MazeGrid
         {
             for (int wallRow = 0, row = 1; wallRow < verticalWalls.GetLength(1); wallRow++, row += 2)
             {
-                MazeCells[column, row] = new MazeCell((verticalWalls[wallColumn, wallRow] ? CellType.VerticalWall : CellType.Space));
+                MazeCells[column, row] = verticalWalls[wallColumn, wallRow] ? CellType.VerticalWall : CellType.Space;
             }
         }
     }
@@ -166,7 +165,7 @@ public class MazeGrid
         {
             for (int wallRow = 0, row = 2; wallRow < horizontalWalls.GetLength(1); wallRow++, row += 2)
             {
-                MazeCells[column, row] = new MazeCell((horizontalWalls[wallColumn, wallRow] ? CellType.HorizontalWall : CellType.Space));
+                MazeCells[column, row] = horizontalWalls[wallColumn, wallRow] ? CellType.HorizontalWall : CellType.Space;
             }
         }
     }
@@ -177,7 +176,7 @@ public class MazeGrid
         {
             for (int row = 1; row < RowCount; row += 2)
             {
-                MazeCells[column, row] = new MazeCell(CellType.Space);
+                MazeCells[column, row] = CellType.Space;
             }
         }
 
@@ -185,23 +184,28 @@ public class MazeGrid
         {
             for (int row = 1; row <= 3; row++)
             {
-                MazeCells[column, row] = new MazeCell(CellType.Space);
+                MazeCells[column, row] = CellType.Space;
             }
         }
 
-        MazeCells[2, 2] = new MazeCell(CellType.Space);
+        MazeCells[2, 2] = CellType.Space;
 
-        MazeCells[Entrance.Column, Entrance.Row] = new MazeCell(CellType.Space);
+        MazeCells[Entrance.Column, Entrance.Row] = CellType.Space;
     }
 
-    public MazeCell GetCell(MazeLocation location)
+    public CellType GetCellType(MazeLocation location)
     {
         return MazeCells[location.Column, location.Row];
     }
 
-    public MazeCell GetCell(int column, int row)
+    public CellType GetCellType(int column, int row)
     {
         return MazeCells[column, row];
+    }
+
+    public void SetCellType(MazeLocation location, CellType cellType)
+    {
+        MazeCells[location.Column, location.Row] = cellType;
     }
 
     public bool CanMove(MazeLocation currentLocation, Direction direction)
@@ -214,16 +218,16 @@ public class MazeGrid
         switch (direction)
         {
             case Direction.Right:
-                return currentLocation.Column < ColumnCount - 1 && GetCell(adjacentLocation).IsWalkable;
+                return currentLocation.Column < ColumnCount - 1 && GetCellType(adjacentLocation).IsWalkable();
 
             case Direction.Down:
-                return currentLocation.Row < RowCount - 1 && GetCell(adjacentLocation).IsWalkable;
+                return currentLocation.Row < RowCount - 1 && GetCellType(adjacentLocation).IsWalkable();
 
             case Direction.Left:
-                return currentLocation.Column > 0 && GetCell(adjacentLocation).IsWalkable;
+                return currentLocation.Column > 0 && GetCellType(adjacentLocation).IsWalkable();
 
             case Direction.Up:
-                return currentLocation.Row > 0 && GetCell(adjacentLocation).IsWalkable;
+                return currentLocation.Row > 0 && GetCellType(adjacentLocation).IsWalkable();
 
             case Direction.None:
             default:
@@ -291,7 +295,7 @@ public class MazeGrid
         {
             column = GD.RandRange(1, ColumnCount - 1 - 1);
             row = GD.RandRange(1, RowCount - 1 - 1);
-        } while (!GetCell(column, row).IsWalkable);
+        } while (!GetCellType(column, row).IsWalkable());
 
         return new MazeLocation(column, row);
     }

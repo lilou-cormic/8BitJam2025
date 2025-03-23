@@ -1,6 +1,7 @@
 ﻿using Godot;
 using System;
 using System.Linq;
+using static Godot.TextServer;
 
 public partial class Player : MazeExplorer
 {
@@ -15,6 +16,18 @@ public partial class Player : MazeExplorer
     public int MaxHP = 3;
 
     public int HP = 3;
+
+    private bool _isHurting = false;
+
+    private bool _canGoBerserk = true;
+    private bool _isBerserk = false;
+
+    public override void _EnterTree()
+    {
+        base._EnterTree();
+
+        ScoreManager.ScoreChanged += ScoreManager_ScoreChanged;
+    }
 
     public override void _Ready()
     {
@@ -40,6 +53,16 @@ public partial class Player : MazeExplorer
         if (GameManager.IsGameOver)
             return;
 
+        if (Input.IsActionJustPressed("A-button"))
+        {
+            if (_canGoBerserk)
+                _isBerserk = true;
+        }
+        else if (Input.IsActionJustPressed("B-button"))
+        {
+            _isBerserk = false;
+        }
+
         if (Input.IsActionJustPressed("D-pad-right"))
         {
             TryMove(Direction.Right);
@@ -56,17 +79,58 @@ public partial class Player : MazeExplorer
         {
             TryMove(Direction.Up);
         }
+
+        SetColor();
+        SetBerserkIcon();
+    }
+
+    public override void _ExitTree()
+    {
+        ScoreManager.ScoreChanged -= ScoreManager_ScoreChanged;
+    }
+
+    private void SetColor()
+    {
+        if (_isBerserk)
+            SelfModulate = ColorPalette.Blue;
+        else if (_isHurting)
+            SelfModulate = ColorPalette.Red;
+        else
+            SelfModulate = ColorPalette.Brown;
     }
 
     private void SetDirection(Sprite2D sprite, Direction direction)
     {
-        sprite.Visible = GameManager.CanMove(Location, direction);
+        sprite.Visible = CanMove(direction);
 
-        sprite.SelfModulate = GameManager.IsEnemyThere(Location.GetAdjacent(direction)) ? ColorPalette.Red : ColorPalette.White;
+        sprite.SelfModulate = GetCellSelectColor(Location.GetAdjacent(direction));
+    }
+
+    private void SetBerserkIcon()
+    {
+        GetNode<Sprite2D>("%BerserkFrame").SelfModulate = _isBerserk ? ColorPalette.Brown : ColorPalette.White;
+        GetNode<Sprite2D>("%BerserkAvailable").Visible = _canGoBerserk;
+    }
+
+    private Color GetCellSelectColor(MazeLocation location)
+    {
+        if (GameManager.IsEnemyThere(location))
+            return ColorPalette.Red;
+
+        if (GameManager.IsWallOrPillarThere(location))
+            return ColorPalette.Blue;
+
+        return ColorPalette.White;
     }
 
     public void Attack(Enemy enemy)
     {
+        if (_isBerserk)
+        {
+            _isBerserk = false;
+            _canGoBerserk = false;
+        }
+
         enemy.Damage();
 
         OnMoved(Direction.None);
@@ -77,36 +141,51 @@ public partial class Player : MazeExplorer
         if (Location.GetAdjacent(direction) == GameManager.Entrance)
             return false;
 
-        return base.CanMove(direction);
+        return GameManager.CanMove(Location, direction, _isBerserk);
     }
 
     public async void Damage()
     {
-        HP--;
+        if (_isBerserk)
+        {
+            _isBerserk = false;
+            _canGoBerserk = false;
 
-        PlayerHPChanged?.Invoke();
+            GetNode<AudioStreamPlayer2D>("NoHurtSoundPlayer").Play();
+        }
+        else
+        {
+            HP--;
 
-        if (HP <= 0)
-            GameManager.GameOver();
+            PlayerHPChanged?.Invoke();
 
-        GetNode<AudioStreamPlayer2D>("HurtSoundPlayer").Play();
+            if (HP <= 0)
+                GameManager.GameOver();
 
-        SelfModulate = ColorPalette.Red;
-        await ToSignal(GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
-        SelfModulate = ColorPalette.Brown;
-    }
+            GetNode<AudioStreamPlayer2D>("HurtSoundPlayer").Play();
 
-    private bool IsEnemyThere(Direction direction)
-    {
-        return GameManager.IsEnemyThere(Location.GetAdjacent(direction));
+            _isHurting = true;
+            SelfModulate = ColorPalette.Red;
+            await ToSignal(GetTree().CreateTimer(0.2f), SceneTreeTimer.SignalName.Timeout);
+            _isHurting = false;
+        }
     }
 
     protected override bool TryMove(Direction direction)
     {
-        if (IsEnemyThere(direction))
+        MazeLocation location = Location.GetAdjacent(direction);
+
+        if (GameManager.IsEnemyThere(location))
         {
-            Attack(GameManager.Enemies.First(x => x.Location == Location.GetAdjacent(direction)));
+            Attack(GameManager.Enemies.First(x => x.Location == location));
             return true;
+        }
+
+        if (_isBerserk && GameManager.IsWallOrPillarThere(location))
+        {
+            GameManager.DestroyWall(location);
+            _isBerserk = false;
+            _canGoBerserk = false;
         }
 
         return base.TryMove(direction);
@@ -115,5 +194,11 @@ public partial class Player : MazeExplorer
     protected override void OnMoved(Direction direction)
     {
         PlayerMoved?.Invoke();
+    }
+
+    private void ScoreManager_ScoreChanged()
+    {
+        if (ScoreManager.Score % 500 == 0)
+            _canGoBerserk = true;
     }
 }

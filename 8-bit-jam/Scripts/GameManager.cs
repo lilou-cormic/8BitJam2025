@@ -20,11 +20,15 @@ public partial class GameManager : Node
     private static Vector2I Intersection = new(48, 10);
     private static Vector2I Empty = new(-1, -1);
 
+    private static Vector2I BrokenWall = new(2, 0);
+
     public static Player Player { get; private set; }
 
     public static List<Enemy> Enemies { get; private set; }
 
     [Export] PackedScene EnemyPrefab;
+
+    private TileMapLayer _tileMapLayer;
 
     private bool _IsGameOver = false;
     public static bool IsGameOver => _instance._IsGameOver;
@@ -49,13 +53,14 @@ public partial class GameManager : Node
         Player = GetNode<Player>("%Player");
         Player.SetLocation(Maze.PlayerStartLocation);
 
-        TileMapLayer tileMapLayer = GetNode<TileMapLayer>("%TileMapLayer");
+        _tileMapLayer = GetNode<TileMapLayer>("%TileMapLayer");
+        _tileMapLayer.SelfModulate = ColorPalette.Gray;
 
         for (int row = 0; row < MazeGrid.RowCount; row++)
         {
             for (int col = 0; col < MazeGrid.ColumnCount; col++)
             {
-                tileMapLayer.SetCell(new Vector2I(col, row), 1, GetAtlasCoords(Maze.GetCell(col, row).CellType));
+                SetCell(col, row);
             }
         }
 
@@ -69,6 +74,25 @@ public partial class GameManager : Node
         Player.PlayerMoved -= Player_PlayerMoved;
     }
 
+    private void SetCell(int col, int row, Vector2I? atlasCoords = null)
+    {
+        if (atlasCoords == null)
+            atlasCoords = GetAtlasCoords(Maze.GetCellType(col, row));
+
+        _tileMapLayer.SetCell(new Vector2I(col, row), 1, atlasCoords);
+        _tileMapLayer.SelfModulate = Colors.White;
+        _tileMapLayer.SelfModulate = ColorPalette.Gray;
+    }
+
+    public static void DestroyWall(MazeLocation location)
+    {
+        _instance.GetNode<AudioStreamPlayer2D>("%DestroyWallSoundPlayer").Play();
+
+        _instance.Maze.SetCellType(location, CellType.Space);
+
+        _instance.SetCell(location.Column, location.Row, BrokenWall);
+    }
+
     private void SpawnEnemy()
     {
         if (IsEnemyThere(Maze.Entrance))
@@ -80,10 +104,13 @@ public partial class GameManager : Node
         Enemies.Add(enemy);
     }
 
-    public static bool CanMove(MazeLocation currentLocation, Direction direction)
+    public static bool CanMove(MazeLocation currentLocation, Direction direction, bool canDestroyWalls = false)
     {
         if (IsGameOver)
             return false;
+
+        if (canDestroyWalls && !_instance.Maze.GetCellType(currentLocation.GetAdjacent(direction)).IsBorder())
+            return true;
 
         return _instance.Maze.CanMove(currentLocation, direction);
     }
@@ -140,6 +167,11 @@ public partial class GameManager : Node
     public static bool IsEnemyThere(MazeLocation location)
     {
         return Enemies.Any(x => x.Location == location);
+    }
+
+    public static bool IsWallOrPillarThere(MazeLocation location)
+    {
+        return _instance.Maze.GetCellType(location).IsWallOrPillar();
     }
 
     private void Player_PlayerMoved()

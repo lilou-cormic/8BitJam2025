@@ -20,6 +20,7 @@ texture = ExtResource("1_kroot")
 centered = false
 
 [node name="CopyrightLabel" type="Label" parent="."]
+self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 offset_left = 12.0
 offset_top = 108.0
 offset_right = 244.0
