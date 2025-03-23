@@ -2,6 +2,8 @@
 
 public partial class Enemy : MazeExplorer
 {
+    [Export] PackedScene PointsPrefab;
+
     private bool _isDead = false;
 
     private Direction _direction = Direction.Up;
@@ -40,6 +42,10 @@ public partial class Enemy : MazeExplorer
         ScoreManager.Add(100);
 
         _isDead = true;
+
+        Points points = PointsPrefab.Instantiate<Points>();
+        points.GlobalPosition = GlobalPosition;
+        GetParent().AddChild(points);
 
         GameManager.Enemies.Remove(this);
 

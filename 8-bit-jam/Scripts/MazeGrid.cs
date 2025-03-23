@@ -31,51 +31,50 @@ public class MazeGrid
         PlayerStartLocation = new MazeLocation(2, 2);
 
         #region MazeString
+        //StringBuilder mazeString = new StringBuilder();
 
-        StringBuilder mazeString = new StringBuilder();
+        //for (int row = 0; row < MazeCells.GetLength(1); row++)
+        //{
+        //    for (int col = 0; col < MazeCells.GetLength(0); col++)
+        //    {
+        //        switch (MazeCells[col, row].CellType)
+        //        {
+        //            case CellType.LeftBorder:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.TopBorder:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.RightBorder:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.BottomBorder:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.CornerBorder:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.HorizontalWall:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.VerticalWall:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.Intersection:
+        //                mazeString.Append("██");
+        //                break;
+        //            case CellType.Space:
+        //                mazeString.Append("  ");
+        //                break;
+        //            default:
+        //                mazeString.Append("  ");
+        //                break;
+        //        }
+        //    }
+        //    mazeString.AppendLine();
+        //}
 
-        for (int row = 0; row < MazeCells.GetLength(1); row++)
-        {
-            for (int col = 0; col < MazeCells.GetLength(0); col++)
-            {
-                switch (MazeCells[col, row].CellType)
-                {
-                    case CellType.LeftBorder:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.TopBorder:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.RightBorder:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.BottomBorder:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.CornerBorder:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.HorizontalWall:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.VerticalWall:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.Intersection:
-                        mazeString.Append("██");
-                        break;
-                    case CellType.Space:
-                        mazeString.Append("  ");
-                        break;
-                    default:
-                        mazeString.Append("  ");
-                        break;
-                }
-            }
-            mazeString.AppendLine();
-        }
-
-        GD.Print(mazeString.ToString());
+        //GD.Print(mazeString.ToString());
         #endregion
     }
 

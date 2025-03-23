@@ -21,9 +21,9 @@ centered = false
 
 [node name="CopyrightLabel" type="Label" parent="."]
 offset_left = 12.0
-offset_top = 106.0
+offset_top = 108.0
 offset_right = 244.0
-offset_bottom = 217.0
+offset_bottom = 219.0
 theme_override_font_sizes/font_size = 8
 text = "GAME MADE FOR 8-BIT JAM 2025
   BY 
@@ -33,24 +33,24 @@ MUSIC ©2021 RETRO INDIE JOSH
 
 ART & SFX KENNEY CC0
 
-“NINTENDO NES FONT” ©GOATMEAL
+FONT ©2010 GOATMEAL
  CC BY-NC-SA 3.0
 "
 
 [node name="LilouLabel" type="Label" parent="."]
 self_modulate = Color(0.921569, 0.623529, 0.137255, 1)
 offset_left = 52.0
-offset_top = 117.0
-offset_right = 144.0
-offset_bottom = 129.0
+offset_top = 119.0
+offset_right = 148.0
+offset_bottom = 131.0
 theme_override_font_sizes/font_size = 8
 text = "LILOU CORMIC"
 
 [node name="LilouLabel2" type="Label" parent="."]
 self_modulate = Color(0.921569, 0.623529, 0.137255, 1)
 offset_left = 52.0
-offset_top = 119.0
+offset_top = 121.0
 offset_right = 144.0
-offset_bottom = 131.0
+offset_bottom = 133.0
 theme_override_font_sizes/font_size = 8
 text = "     -"

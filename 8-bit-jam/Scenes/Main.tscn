@@ -1106,6 +1106,7 @@ unique_name_in_owner = true
 stream = ExtResource("1_uul6c")
 volume_db = -3.0
 autoplay = true
+parameters/looping = true
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = -1
