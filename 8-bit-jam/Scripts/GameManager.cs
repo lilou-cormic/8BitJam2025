@@ -286,6 +286,23 @@ public partial class GameManager : Node
         return Enemies.Any(x => x.Location == location);
     }
 
+    public static bool IsEnemyNear(MazeLocation location)
+    {        
+        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Right)))
+            return true;
+
+        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Down)))
+            return true;
+
+        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Left)))
+            return true;
+
+        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Up)))
+            return true;
+
+        return false;
+    }
+
     public static bool IsWallOrPillarThere(MazeLocation location)
     {
         return _instance.Maze.GetCellType(location).IsWallOrPillar();

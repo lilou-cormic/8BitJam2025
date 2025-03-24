@@ -50,10 +50,10 @@ public partial class Player : MazeExplorer
 
     public override void _Process(double delta)
     {
-        SetDirection(Right, Direction.Right);
-        SetDirection(Down, Direction.Down);
-        SetDirection(Left, Direction.Left);
-        SetDirection(Up, Direction.Up);
+        SetCellSelector(Right, Direction.Right);
+        SetCellSelector(Down, Direction.Down);
+        SetCellSelector(Left, Direction.Left);
+        SetCellSelector(Up, Direction.Up);
 
         if (GameManager.IsGameOver)
             return;
@@ -104,7 +104,7 @@ public partial class Player : MazeExplorer
             SelfModulate = ColorPalette.Brown;
     }
 
-    private void SetDirection(Sprite2D sprite, Direction direction)
+    private void SetCellSelector(Sprite2D sprite, Direction direction)
     {
         sprite.Visible = CanMove(direction);
 
@@ -120,6 +120,9 @@ public partial class Player : MazeExplorer
     private Color GetCellSelectColor(MazeLocation location)
     {
         if (GameManager.IsEnemyThere(location))
+            return _isBerserk ? ColorPalette.Blue : ColorPalette.Brown;
+
+        if (GameManager.IsEnemyNear(location))
             return _isBerserk ? ColorPalette.Blue : ColorPalette.Red;
 
         if (GameManager.IsWallOrPillarThere(location))
