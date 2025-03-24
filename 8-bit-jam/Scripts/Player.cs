@@ -122,7 +122,7 @@ public partial class Player : MazeExplorer
         if (GameManager.IsEnemyThere(location))
             return _isBerserk ? ColorPalette.Blue : ColorPalette.Brown;
 
-        if (GameManager.IsEnemyNear(location))
+        if (GameManager.IsDangerNear(location))
             return _isBerserk ? ColorPalette.Blue : ColorPalette.Red;
 
         if (GameManager.IsWallOrPillarThere(location))

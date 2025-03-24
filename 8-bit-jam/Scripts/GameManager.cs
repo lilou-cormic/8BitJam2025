@@ -286,18 +286,21 @@ public partial class GameManager : Node
         return Enemies.Any(x => x.Location == location);
     }
 
-    public static bool IsEnemyNear(MazeLocation location)
-    {        
-        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Right)))
+    public static bool IsDangerNear(MazeLocation location)
+    {
+        if (!Enemies.Any(x => x.CouldMove))
+            return false;
+
+        if (Enemies.Any(x => x.CouldMove && x.Location == location.GetAdjacent(Direction.Right)))
             return true;
 
-        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Down)))
+        if (Enemies.Any(x => x.CouldMove && x.Location == location.GetAdjacent(Direction.Down)))
             return true;
 
-        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Left)))
+        if (Enemies.Any(x => x.CouldMove && x.Location == location.GetAdjacent(Direction.Left)))
             return true;
 
-        if (Enemies.Any(x => x.Location == location.GetAdjacent(Direction.Up)))
+        if (Enemies.Any(x => x.CouldMove && x.Location == location.GetAdjacent(Direction.Up)))
             return true;
 
         return false;

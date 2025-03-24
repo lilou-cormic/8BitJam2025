@@ -4,10 +4,15 @@ public partial class Enemy : MazeExplorer
 {
     [Export] int Strength = 1;
     [Export] int Points = 100;
+    [Export] int TurnsToMove = 4;
     [Export] PackedScene PointsPrefab;
     [Export] PackedScene DoublePtsPrefab;
 
     private bool _isDead = false;
+
+    private int _turnsCount = 0;
+
+    public bool CouldMove => _turnsCount >= TurnsToMove - 1;
 
     private Direction _direction = Direction.Up;
 
@@ -59,6 +64,7 @@ public partial class Enemy : MazeExplorer
     protected override void OnMoved(Direction direction)
     {
         _direction = direction;
+        _turnsCount = 0;
     }
 
     private bool IsPlayerThere(Direction direction)
@@ -76,20 +82,27 @@ public partial class Enemy : MazeExplorer
 
     protected override bool TryMove(Direction direction)
     {
-        if (IsPlayerThere(direction))
+        if (_turnsCount >= TurnsToMove)
         {
-            Attack();
-            OnMoved(direction);
-            return true;
+            if (IsPlayerThere(direction))
+            {
+                Attack();
+                OnMoved(direction);
+                return true;
+            }
+
+            return base.TryMove(direction);
         }
 
-        return base.TryMove(direction);
+        return false;
     }
 
     private void Player_PlayerMoved()
     {
         if (_isDead)
             return;
+
+        _turnsCount++;
 
         Direction direction1 = (Direction)(((int)_direction + 1) % 4);
 
