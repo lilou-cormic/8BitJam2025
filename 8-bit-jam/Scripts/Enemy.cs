@@ -4,7 +4,7 @@ public partial class Enemy : MazeExplorer
 {
     [Export] int Strength = 1;
     [Export] int Points = 100;
-    [Export] int TurnsToMove = 4;
+    [Export] int TurnsToMove = 2;
     [Export] PackedScene PointsPrefab;
     [Export] PackedScene DoublePtsPrefab;
 
@@ -19,13 +19,6 @@ public partial class Enemy : MazeExplorer
     public override void _EnterTree()
     {
         Player.PlayerMoved += Player_PlayerMoved;
-    }
-
-    public override void _Ready()
-    {
-        base._Ready();
-
-        SetLocation(GameManager.Entrance);
     }
 
     public override void _ExitTree()

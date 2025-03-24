@@ -217,15 +217,16 @@ public partial class Player : MazeExplorer
 
         if (_ptsForBerserk >= 500)
         {
+            if (BerserkCount < 5)
+                GetNode<AudioStreamPlayer2D>("BerserkGetSoundPlayer").Play();
+
             for (; _ptsForBerserk >= 500; _ptsForBerserk -= 500)
             {
-                if (BerserkCount < 3)
+                if (BerserkCount < 5)
                     BerserkCount++;
             }
 
             BerserkCountChanged?.Invoke();
-
-            GetNode<AudioStreamPlayer2D>("BerserkGetSoundPlayer").Play();
         }
     }
 }

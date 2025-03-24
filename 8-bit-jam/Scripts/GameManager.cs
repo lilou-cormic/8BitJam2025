@@ -1,15 +1,12 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
-using static Godot.TextServer;
 
 public partial class GameManager : Node
 {
     private static GameManager _instance;
 
     private MazeGrid Maze;
-
-    public static MazeLocation Entrance => _instance?.Maze?.Entrance;
 
     private static Vector2I LeftBorder = new(20, 1);
     private static Vector2I TopBorder = new(19, 2);
@@ -33,6 +30,8 @@ public partial class GameManager : Node
 
     private TileMapLayer _tileMapLayer;
 
+    private List<MazeLocation> _entrances;
+
     private bool _IsGameOver = false;
     public static bool IsGameOver => _instance._IsGameOver;
 
@@ -54,6 +53,7 @@ public partial class GameManager : Node
         ScoreManager.Reset();
 
         Maze = MazeGrid.CreateMaze();
+        _entrances = new List<MazeLocation> { Maze.Entrance };
 
         Player = GetNode<Player>("%Player");
         Player.SetLocation(Maze.PlayerStartLocation);
@@ -73,6 +73,7 @@ public partial class GameManager : Node
         _enemyQueue = new Queue<int>();
 
         InitEnemyQueue();
+        SpawnEnemy(0, _entrances[0]);
     }
 
     public override void _ExitTree()
@@ -135,14 +136,80 @@ public partial class GameManager : Node
         _instance.SetCell(location.Column, location.Row, BrokenWall);
     }
 
+    private void TryDestroyBorder()
+    {
+        MazeLocation location;
+
+        Direction[] dirs = new Direction[] { Direction.Left, Direction.Right, Direction.Up };
+
+        Direction direction = dirs[GD.RandRange(0, 2)];
+
+        int column;
+        int row;
+
+        switch (direction)
+        {
+            case Direction.Right:
+                column = 0;
+                row = GD.RandRange(1, MazeGrid.RowCount - 2);
+                break;
+
+            case Direction.Left:
+                column = MazeGrid.ColumnCount - 1;
+                row = GD.RandRange(1, MazeGrid.RowCount - 2);
+                break;
+
+            case Direction.Up:
+                column = GD.RandRange(1, MazeGrid.ColumnCount - 2);
+                row = MazeGrid.RowCount - 1;
+                break;
+
+            default:
+                return;
+        }
+
+        location = new MazeLocation(column, row);
+
+        switch (Maze.GetCellType(column, row))
+        {
+            case CellType.TopBorder:
+                if (Maze.GetCellType(column, row + 1) != CellType.Space)
+                    return;
+                break;
+
+            case CellType.BottomBorder:
+                if (Maze.GetCellType(column, row - 1) != CellType.Space)
+                    return;
+                break;
+
+            case CellType.LeftBorder:
+                if (Maze.GetCellType(column + 1, row) != CellType.Space)
+                    return;
+                break;
+
+            case CellType.RightBorder:
+                if (Maze.GetCellType(column - 1, row) != CellType.Space)
+                    return;
+                break;
+
+            default:
+                return;
+        }
+
+        DestroyWall(location);
+        _entrances.Add(location);
+    }
+
     private void TrySpawnEnemy()
     {
         int wave = (_enemyCount / 10);
 
+        MazeLocation entrance = _entrances[GD.RandRange(0, _entrances.Count - 1)];
+
         if (wave >= 10)
         {
-            if (!IsEnemyThere(Maze.Entrance))
-                SpawnEnemy(2);
+            if (!IsEnemyThere(entrance))
+                SpawnEnemy(2, entrance);
 
             return;
         }
@@ -162,8 +229,8 @@ public partial class GameManager : Node
         if (_stepCount % (10 - wave) == 0)
         {
 
-            if (_enemyQueue.Count > 0 && !IsEnemyThere(Maze.Entrance))
-                SpawnEnemy(_enemyQueue.Dequeue());
+            if (_enemyQueue.Count > 0 && !IsEnemyThere(entrance))
+                SpawnEnemy(_enemyQueue.Dequeue(), entrance);
         }
     }
 
@@ -206,12 +273,13 @@ public partial class GameManager : Node
         }
     }
 
-    private void SpawnEnemy(int tier)
+    private void SpawnEnemy(int tier, MazeLocation location)
     {
         _enemyCount++;
 
         Enemy enemy = EnemyPrefabs[tier].Instantiate<Enemy>();
         AddChild(enemy);
+        enemy.SetLocation(location);
 
         Enemies.Add(enemy);
     }
@@ -223,7 +291,7 @@ public partial class GameManager : Node
 
         MazeLocation location = currentLocation.GetAdjacent(direction);
 
-        if (location == _instance.Maze.Entrance)
+        if (IsEntrance(location))
             return false;
 
         if (canDestroyWalls && !_instance.Maze.GetCellType(location).IsBorder())
@@ -311,10 +379,18 @@ public partial class GameManager : Node
         return _instance.Maze.GetCellType(location).IsWallOrPillar();
     }
 
+    public static bool IsEntrance(MazeLocation location)
+    {
+        return _instance._entrances.Any(x => x == location);
+    }
+
     private void Player_PlayerMoved()
     {
         _stepCount++;
 
         TrySpawnEnemy();
+
+        if (_stepCount % 100 == 0)
+            TryDestroyBorder();
     }
 }

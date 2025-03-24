@@ -10,6 +10,6 @@ self_modulate = Color(0.756863, 0.878431, 0.996078, 1)
 texture = ExtResource("2_1pbq7")
 Strength = 2
 Points = 500
-TurnsToMove = 3
+TurnsToMove = 1
 PointsPrefab = ExtResource("3_cdwvx")
 DoublePtsPrefab = ExtResource("4_avlg5")
