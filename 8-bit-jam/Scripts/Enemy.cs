@@ -2,6 +2,8 @@
 
 public partial class Enemy : MazeExplorer
 {
+    [Export] int Strength = 1;
+    [Export] int Points = 100;
     [Export] PackedScene PointsPrefab;
     [Export] PackedScene DoublePtsPrefab;
 
@@ -19,8 +21,6 @@ public partial class Enemy : MazeExplorer
         base._Ready();
 
         SetLocation(GameManager.Entrance);
-
-        SelfModulate = ColorPalette.White;
     }
 
     public override void _ExitTree()
@@ -30,7 +30,7 @@ public partial class Enemy : MazeExplorer
 
     public void Attack()
     {
-        GameManager.Player.Damage();
+        GameManager.Player.Damage(Strength);
     }
 
     public async void Damage(bool doublePoints = false)
@@ -40,7 +40,7 @@ public partial class Enemy : MazeExplorer
 
         GetNode<AudioStreamPlayer2D>(doublePoints ? "BigHurtSoundPlayer" : "HurtSoundPlayer").Play();
 
-        ScoreManager.Add(100 * (doublePoints ? 2 : 1));
+        ScoreManager.Add(Points * (doublePoints ? 2 : 1));
 
         _isDead = true;
 

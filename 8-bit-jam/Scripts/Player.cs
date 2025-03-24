@@ -22,6 +22,8 @@ public partial class Player : MazeExplorer
     private bool CanGoBerserk => BerserkCount > 0;
     private bool _isBerserk = false;
 
+    private int _ptsForBerserk = 0;
+
     public int BerserkCount { get; private set; }
 
     public override void _EnterTree()
@@ -138,13 +140,10 @@ public partial class Player : MazeExplorer
 
     protected override bool CanMove(Direction direction)
     {
-        if (Location.GetAdjacent(direction) == GameManager.Entrance)
-            return false;
-
         return GameManager.CanMove(Location, direction, _isBerserk);
     }
 
-    public async void Damage()
+    public async void Damage(int damage)
     {
         if (_isBerserk)
         {
@@ -154,7 +153,7 @@ public partial class Player : MazeExplorer
         }
         else
         {
-            HP--;
+            HP -= damage;
 
             PlayerHPChanged?.Invoke();
 
@@ -209,12 +208,17 @@ public partial class Player : MazeExplorer
         PlayerMoved?.Invoke();
     }
 
-    private void ScoreManager_ScoreChanged()
+    private void ScoreManager_ScoreChanged(int points)
     {
-        if (ScoreManager.Score % 500 == 0)
+        _ptsForBerserk += points;
+
+        if (_ptsForBerserk >= 500)
         {
-            if (BerserkCount < 9)
-                BerserkCount++;
+            for (; _ptsForBerserk >= 500; _ptsForBerserk -= 500)
+            {
+                if (BerserkCount < 9)
+                    BerserkCount++;
+            }
 
             BerserkCountChanged?.Invoke();
 

@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://bky11osgtxyrx"]
+
+[ext_resource type="PackedScene" uid="uid://dqecl25b134ee" path="res://Prefabs/Points.tscn" id="1_whpv3"]
+[ext_resource type="Texture2D" uid="uid://4xaek5g3bghv" path="res://Images/Pts2000.tres" id="2_0xmcn"]
+
+[node name="Pts2000" instance=ExtResource("1_whpv3")]
+texture = ExtResource("2_0xmcn")

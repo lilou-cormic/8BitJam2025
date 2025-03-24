@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://bwosjjk55shas"]
+
+[ext_resource type="PackedScene" uid="uid://dr01yugnp7cf3" path="res://Prefabs/Enemy.tscn" id="1_wx1u8"]
+[ext_resource type="Texture2D" uid="uid://yognfghljdou" path="res://Images/Paladin.tres" id="2_43hbs"]
+[ext_resource type="PackedScene" uid="uid://1oa3q75keg2f" path="res://Prefabs/Pts1000.tscn" id="3_vkies"]
+[ext_resource type="PackedScene" uid="uid://bky11osgtxyrx" path="res://Prefabs/Pts2000.tscn" id="4_o8wd6"]
+
+[node name="Paladin" instance=ExtResource("1_wx1u8")]
+self_modulate = Color(0.898039, 0.901961, 0.584314, 1)
+texture = ExtResource("2_43hbs")
+Strength = 3
+Points = 1000
+PointsPrefab = ExtResource("3_vkies")
+DoublePtsPrefab = ExtResource("4_o8wd6")

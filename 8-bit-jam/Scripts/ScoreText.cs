@@ -22,7 +22,7 @@ public partial class ScoreText : Label
         Text = ScoreManager.Score.ToString("000000");
     }
 
-    private void ScoreManager_ScoreChanged()
+    private void ScoreManager_ScoreChanged(int points)
     {
         SetText();
     }

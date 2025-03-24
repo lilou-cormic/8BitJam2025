@@ -6,7 +6,7 @@ public static class ScoreManager
 
     public static int Score { get; private set; }
 
-    public static event Action ScoreChanged;
+    public static event Action<int> ScoreChanged;
 
     public static void Add(int points)
     {
@@ -15,7 +15,7 @@ public static class ScoreManager
         if (Score > TopScore)
             TopScore = Score;
 
-        ScoreChanged?.Invoke();
+        ScoreChanged?.Invoke(points);
     }
 
     public static void Reset()

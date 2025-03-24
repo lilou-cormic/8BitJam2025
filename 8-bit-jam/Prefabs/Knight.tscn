@@ -1,0 +1,14 @@
+[gd_scene load_steps=5 format=3 uid="uid://dsehtlv0mibt1"]
+
+[ext_resource type="PackedScene" uid="uid://dr01yugnp7cf3" path="res://Prefabs/Enemy.tscn" id="1_783xp"]
+[ext_resource type="Texture2D" uid="uid://vcc2tjy6cpst" path="res://Images/Knight.tres" id="2_1pbq7"]
+[ext_resource type="PackedScene" uid="uid://bderi4upfauak" path="res://Prefabs/Pts0500.tscn" id="3_cdwvx"]
+[ext_resource type="PackedScene" uid="uid://1oa3q75keg2f" path="res://Prefabs/Pts1000.tscn" id="4_avlg5"]
+
+[node name="Knight" instance=ExtResource("1_783xp")]
+self_modulate = Color(0.756863, 0.878431, 0.996078, 1)
+texture = ExtResource("2_1pbq7")
+Strength = 2
+Points = 500
+PointsPrefab = ExtResource("3_cdwvx")
+DoublePtsPrefab = ExtResource("4_avlg5")

@@ -8,7 +8,6 @@
 [ext_resource type="AudioStream" uid="uid://eicibvxialwm" path="res://Sounds/hit2.ogg" id="6_es2m5"]
 
 [node name="Enemy" type="Sprite2D"]
-self_modulate = Color(0.996078, 0.996078, 0.996078, 1)
 texture = ExtResource("1_lqira")
 centered = false
 script = ExtResource("2_ssrpv")

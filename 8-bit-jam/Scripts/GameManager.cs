@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using static Godot.TextServer;
 
 public partial class GameManager : Node
 {
@@ -26,7 +27,9 @@ public partial class GameManager : Node
 
     public static List<Enemy> Enemies { get; private set; }
 
-    [Export] PackedScene EnemyPrefab;
+    private Queue<int> _enemyQueue;
+
+    [Export] PackedScene[] EnemyPrefabs;
 
     private TileMapLayer _tileMapLayer;
 
@@ -35,7 +38,9 @@ public partial class GameManager : Node
 
     private bool _canRestart = false;
 
-    private int count = 0;
+    private int _stepCount = 0;
+
+    private int _enemyCount = 0;
 
     public override void _EnterTree()
     {
@@ -65,13 +70,50 @@ public partial class GameManager : Node
         }
 
         Enemies = new List<Enemy>();
+        _enemyQueue = new Queue<int>();
 
-        SpawnEnemy();
+        InitEnemyQueue();
     }
 
     public override void _ExitTree()
     {
         Player.PlayerMoved -= Player_PlayerMoved;
+    }
+
+    private void InitEnemyQueue()
+    {
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(1);
+
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(1);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(1);
+
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(1);
+        _enemyQueue.Enqueue(1);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(1);
+        _enemyQueue.Enqueue(1);
+        _enemyQueue.Enqueue(0);
+        _enemyQueue.Enqueue(2);
     }
 
     private void SetCell(int col, int row, Vector2I? atlasCoords = null)
@@ -93,12 +135,82 @@ public partial class GameManager : Node
         _instance.SetCell(location.Column, location.Row, BrokenWall);
     }
 
-    private void SpawnEnemy()
+    private void TrySpawnEnemy()
     {
-        if (IsEnemyThere(Maze.Entrance))
-            return;
+        int wave = (_enemyCount / 10);
 
-        Enemy enemy = EnemyPrefab.Instantiate<Enemy>();
+        if (wave >= 10)
+        {
+            if (!IsEnemyThere(Maze.Entrance))
+                SpawnEnemy(2);
+
+            return;
+        }
+
+        if (_enemyQueue.Count == 0)
+        {
+            int[] tiers = GetTiers(wave);
+
+            for (int i = 0; i < 10; i++)
+            {
+                int tier = tiers[GD.RandRange(0, tiers.Length - 1)];
+
+                _enemyQueue.Enqueue(tier);
+            }
+        }
+
+        if (_stepCount % (10 - wave) == 0)
+        {
+
+            if (_enemyQueue.Count > 0 && !IsEnemyThere(Maze.Entrance))
+                SpawnEnemy(_enemyQueue.Dequeue());
+        }
+    }
+
+    private int[] GetTiers(int wave)
+    {
+        switch (wave)
+        {
+            case 0:
+                return new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 };
+
+            case 1:
+                return new int[] { 0, 0, 0, 0, 1 };
+
+            case 2:
+                return new int[] { 0, 0, 0, 0, 0, 1, 1, 1, 1, 2 };
+
+            case 3:
+                return new int[] { 0, 0, 0, 0, 1, 1, 1, 2 };
+
+            case 4:
+                return new int[] { 0, 0, 0, 1, 1, 1, 2, 2 };
+
+            case 5:
+                return new int[] { 0, 1, 2 };
+
+            case 6:
+                return new int[] { 0, 1, 1, 2, 2, 2 };
+
+            case 7:
+                return new int[] { 0, 1, 1, 1, 2, 2, 2, 2 };
+
+            case 8:
+                return new int[] { 0, 1, 1, 2, 2, 2, 2, 2, 2, 2 };
+
+            case 9:
+                return new int[] { 1, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
+
+            default:
+                return new int[] { 2 };
+        }
+    }
+
+    private void SpawnEnemy(int tier)
+    {
+        _enemyCount++;
+
+        Enemy enemy = EnemyPrefabs[tier].Instantiate<Enemy>();
         AddChild(enemy);
 
         Enemies.Add(enemy);
@@ -109,7 +221,12 @@ public partial class GameManager : Node
         if (IsGameOver)
             return false;
 
-        if (canDestroyWalls && !_instance.Maze.GetCellType(currentLocation.GetAdjacent(direction)).IsBorder())
+        MazeLocation location = currentLocation.GetAdjacent(direction);
+
+        if (location == _instance.Maze.Entrance)
+            return false;
+
+        if (canDestroyWalls && !_instance.Maze.GetCellType(location).IsBorder())
             return true;
 
         return _instance.Maze.CanMove(currentLocation, direction);
@@ -176,9 +293,8 @@ public partial class GameManager : Node
 
     private void Player_PlayerMoved()
     {
-        count++;
+        _stepCount++;
 
-        if (count % 10 == 0)
-            SpawnEnemy();
+        TrySpawnEnemy();
     }
 }

@@ -1,12 +1,14 @@
-[gd_scene load_steps=21 format=3 uid="uid://bijha5yg76gec"]
+[gd_scene load_steps=23 format=3 uid="uid://bijha5yg76gec"]
 
 [ext_resource type="Script" path="res://Scripts/GameManager.cs" id="1_hyjow"]
 [ext_resource type="AudioStream" uid="uid://dw4yybx28ea85" path="res://Musics/descent.ogg" id="1_uul6c"]
 [ext_resource type="Texture2D" uid="uid://bmvh6md676f4n" path="res://Images/monochrome-transparent_packed.png" id="2_5kmac"]
-[ext_resource type="PackedScene" uid="uid://dr01yugnp7cf3" path="res://Prefabs/Enemy.tscn" id="2_apvhn"]
+[ext_resource type="PackedScene" uid="uid://c2dx31ry255ej" path="res://Prefabs/SwordGuy.tscn" id="3_sjoaq"]
 [ext_resource type="Texture2D" uid="uid://b0mxq1ev47708" path="res://Images/Minotaur.png" id="3_tdvs7"]
 [ext_resource type="Script" path="res://Scripts/Player.cs" id="4_663sx"]
+[ext_resource type="PackedScene" uid="uid://dsehtlv0mibt1" path="res://Prefabs/Knight.tscn" id="4_ghmv5"]
 [ext_resource type="Texture2D" uid="uid://cdqvo04t2rjbq" path="res://Images/CellSelect.tres" id="5_8vct7"]
+[ext_resource type="PackedScene" uid="uid://bwosjjk55shas" path="res://Prefabs/Paladin.tscn" id="5_mmjof"]
 [ext_resource type="AudioStream" uid="uid://cumrq5tiep82h" path="res://Sounds/hit4.ogg" id="8_870y0"]
 [ext_resource type="AudioStream" uid="uid://l50re8004amd" path="res://Sounds/hit5.ogg" id="9_5euid"]
 [ext_resource type="AudioStream" uid="uid://6kdawlxci0ov" path="res://Sounds/hit3.ogg" id="9_bufor"]
@@ -1122,7 +1124,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="GameManager" type="Node2D" parent="."]
 script = ExtResource("1_hyjow")
-EnemyPrefab = ExtResource("2_apvhn")
+EnemyPrefabs = Array[PackedScene]([ExtResource("3_sjoaq"), ExtResource("4_ghmv5"), ExtResource("5_mmjof")])
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 unique_name_in_owner = true
