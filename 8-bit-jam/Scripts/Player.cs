@@ -219,7 +219,7 @@ public partial class Player : MazeExplorer
         {
             for (; _ptsForBerserk >= 500; _ptsForBerserk -= 500)
             {
-                if (BerserkCount < 9)
+                if (BerserkCount < 3)
                     BerserkCount++;
             }
 
