@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="8 Bit Jam"
+config/name="Labyrinth's Wrath"
 config/version="0.1.0"
 config/tags=PackedStringArray("jam_game")
 run/main_scene="res://Scenes/Menu.tscn"
